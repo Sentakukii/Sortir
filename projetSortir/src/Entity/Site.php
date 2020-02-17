@@ -34,6 +34,7 @@ class Site
      */
     private $users;
 
+
     public function __construct()
     {
         $this->events = new ArrayCollection();

@@ -5,11 +5,12 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -17,6 +18,22 @@ class User
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -34,39 +51,29 @@ class User
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $mail;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $admin;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $active;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Site", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $site;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="organizer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="organizer")
      */
-    private $eventOrganized;
+    private $eventsOrganized;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Event", inversedBy="usersList")
      */
-    private $eventList;
+    private $eventsList;
 
     public function __construct()
     {
-        $this->eventOrganized = new ArrayCollection();
-        $this->eventList = new ArrayCollection();
+        $this->eventsList = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -74,6 +81,78 @@ class User
         return $this->id;
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
 
     public function getName(): ?string
     {
@@ -111,30 +190,6 @@ class User
         return $this;
     }
 
-    public function getMail(): ?string
-    {
-        return $this->mail;
-    }
-
-    public function setMail(?string $mail): self
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
-    public function getAdmin(): ?bool
-    {
-        return $this->admin;
-    }
-
-    public function setAdmin(bool $admin): self
-    {
-        $this->admin = $admin;
-
-        return $this;
-    }
-
     public function getActive(): ?bool
     {
         return $this->active;
@@ -159,33 +214,14 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection|Event[]
-     */
-    public function getEventOrganized(): Collection
+    public function getEventsOrganized(): ?Event
     {
-        return $this->eventOrganized;
+        return $this->eventsOrganized;
     }
 
-    public function addEventOrganized(Event $eventOrganized): self
+    public function setEventsOrganized(?Event $eventsOrganized): self
     {
-        if (!$this->eventOrganized->contains($eventOrganized)) {
-            $this->eventOrganized[] = $eventOrganized;
-            $eventOrganized->setOrganizer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEventOrganized(Event $eventOrganized): self
-    {
-        if ($this->eventOrganized->contains($eventOrganized)) {
-            $this->eventOrganized->removeElement($eventOrganized);
-            // set the owning side to null (unless already changed)
-            if ($eventOrganized->getOrganizer() === $this) {
-                $eventOrganized->setOrganizer(null);
-            }
-        }
+        $this->eventsOrganized = $eventsOrganized;
 
         return $this;
     }
@@ -193,24 +229,24 @@ class User
     /**
      * @return Collection|Event[]
      */
-    public function getEventList(): Collection
+    public function getEventsList(): Collection
     {
-        return $this->eventList;
+        return $this->eventsList;
     }
 
-    public function addEventList(Event $eventList): self
+    public function addEventsList(Event $eventsList): self
     {
-        if (!$this->eventList->contains($eventList)) {
-            $this->eventList[] = $eventList;
+        if (!$this->eventsList->contains($eventsList)) {
+            $this->eventsList[] = $eventsList;
         }
 
         return $this;
     }
 
-    public function removeEventList(Event $eventList): self
+    public function removeEventsList(Event $eventsList): self
     {
-        if ($this->eventList->contains($eventList)) {
-            $this->eventList->removeElement($eventList);
+        if ($this->eventsList->contains($eventsList)) {
+            $this->eventsList->removeElement($eventsList);
         }
 
         return $this;
