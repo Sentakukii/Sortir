@@ -1,25 +1,127 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
-
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ app.user.firstName }} {{ app.user.name }}! ✅</h1>
-    {% if app.user %}
-        <div class="mb-3">
-            Vous êtes connecter avec {{ app.user.username }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+    <div id="personal-information" class="row">
+        <div class="col-md-3 offset-md-9 text-right">
+            <div id="today">
+                <span>Date du Jour : </span><span>{{ "now"|date("d/m/Y") }}</span>
+            </div>
+            <div id="name">
+                <span>Participant : </span><span>{{ app.user.name }} {{ app.user.firstName }}</span>
+            </div>
         </div>
-    {% endif %}
+    </div>
+    <div class="row"><h2>Filtrer les sorties</h2></div>
+    <form id="search" action="">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="row search_form_row">
+                    <label class="col-md-7" for="site">Site : </label>
+                    <select class="col-md-5" name="site" id="site">
+                        <option value="default">------</option>
+                        {% for site in sites %}
+                            <option value="{{ site.getId() }}">{{ site.getName() }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="row search_form_row">
+                    <label class="col-md-7" for="search_text">Le nom de la sortie contient : </label>
+                    <input  class="col-md-5" type="text" id="search_text" name="search_text" placeholder="rechercher"/>
+                </div>
+                <div class="row search_form_row">
+                    <label class="col-md-2" for="date_start">entre : </label>
+                    <!-- WOOW holy shit! it's Amaziiing, it works-->
+                    <input  class="col-md-2.5" type="date" id="date_start" name="date_start"/>
+                    <div class="col-md-1 text-center image_calendar">&nbsp;</div>
+                    <span class="col-md-1 text-center"> et </span>
+                    <input  class="col-md-2.5" type="date" id="date_end" name="date_end"/>
+                    <div class="col-md-1 text-center image_calendar">&nbsp;</div>
+                </div>
+            </div>
+            <div class="col-md-3 offset-md-1">
+                <div class="row search_form_row">
+                    <input name="checkbox_organizer" id="checkbox_organizer" type="checkbox" value="organizer">
+                    <label class="checkbox_label" for="checkbox_organizer">&nbsp;Sorties dont je suis l'organisateur/trice</label>
+                </div>
+                <div class="row search_form_row">
+                    <input name="checkbox_participate" id="checkbox_participate" type="checkbox" value="participate">
+                    <label class="checkbox_label" for="checkbox_participate">&nbsp;Sorties auxquelles je suis inscrit/e</label>
+                </div>
+                <div class="row search_form_row">
+                    <input name="checkbox_no_participate" id="checkbox_no_participate" type="checkbox" value="no_participate">
+                    <label class="checkbox_label" for="checkbox_no_participate">&nbsp;Sorties auxquelles je suis pas inscrit/e</label>
+                </div>
+                <div class="row search_form_row">
+                    <input  name="checkbox_past" id="checkbox_past" type="checkbox" value="past">
+                    <label class="checkbox_label" for="checkbox_past">&nbsp;Sorties passées</label>
+                </div>
+            </div>
+            <div class="col-md-3 offset-md-1 text-center">
+                <input type="submit" value="Rechercher" class="btn btn-primary"/>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Nom de la sortie</th>
+                <th scope="col">Date de la sortie
+                <th scope="col">Clôture</th>
+                <th scope="col">Inscrits/places</th>
+                <th scope="col">Etat</th>
+                <th scope="col">Inscrit</th>
+                <th scope="col">Organisateur</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>{{ event.getName() }}</td>
+                    <td>{{ event.getDate()|date("d/m/Y H:m:s") }}</td>
+                    <td>{{ event.getLimitInscription()|date("d/m/Y") }}</td>
+                    <td>{{ event.getUsersList()|length }}/{{ event.getMaxInscriptions() }}</td>
+                    <td>{{ event.getState()}}</td>
+                    <td>
+                        {% if event in app.user.eventsList  %}
+                        <div class="cross"></div>
+                        {% endif %}
+                    </td>
+                    <td>{{ event.getOrganizer() }}</td>
+                    <td>
+                        {% if event in app.user.eventsOrganized  %}
+                            {% if event.getState() == "Créée"  %}
+                                <a href="">Modifier</a>
+                                <span>-</span>
+                                <a href="">Publier</a>
+                            {% else %}
+                                <a href="">Afficher</a>
+                                {% if event.getState() == "Ouverte"  %}
+                                    <span>-</span>
+                                    <a href="">Annuler</a>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <a href="">Afficher</a>
+                            {% if event in app.user.eventsList  %}
+                                <span>-</span>
+                                <a href="">Se désiter</a>
+                            {% else %}
+                                <span>-</span>
+                                <a href="">S'inscrire</a>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/fgobron2018/Documents/projet/Sortir/projetSortir/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/fgobron2018/Documents/projet/Sortir/projetSortir/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}

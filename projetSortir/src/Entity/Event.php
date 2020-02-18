@@ -28,10 +28,7 @@ class Event
      */
     private $date;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $duration;
+
 
     /**
      * @ORM\Column(type="datetime")
@@ -67,19 +64,25 @@ class Event
      */
     private $location;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="eventsOrganized")
-     */
-    private $organizer;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="eventsList")
      */
     private $usersList;
 
+    /**
+     * @ORM\Column(type="time")
+     */
+    private $duration;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="eventsOrganized")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $organizer;
+
     public function __construct()
     {
-        $this->organizer = new ArrayCollection();
         $this->usersList = new ArrayCollection();
     }
 
@@ -112,17 +115,6 @@ class Event
         return $this;
     }
 
-    public function getDuration(): ?\DateTimeInterface
-    {
-        return $this->duration;
-    }
-
-    public function setDuration(?\DateTimeInterface $duration): self
-    {
-        $this->duration = $duration;
-
-        return $this;
-    }
 
     public function getLimitInscription(): ?\DateTimeInterface
     {
@@ -197,36 +189,7 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection|User[]
-     */
-    public function getOrganizer(): Collection
-    {
-        return $this->organizer;
-    }
 
-    public function addOrganizer(User $organizer): self
-    {
-        if (!$this->organizer->contains($organizer)) {
-            $this->organizer[] = $organizer;
-            $organizer->setEventsOrganized($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrganizer(User $organizer): self
-    {
-        if ($this->organizer->contains($organizer)) {
-            $this->organizer->removeElement($organizer);
-            // set the owning side to null (unless already changed)
-            if ($organizer->getEventsOrganized() === $this) {
-                $organizer->setEventsOrganized(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|User[]
@@ -252,6 +215,30 @@ class Event
             $this->usersList->removeElement($usersList);
             $usersList->removeEventsList($this);
         }
+
+        return $this;
+    }
+
+    public function getDuration(): ?\DateTimeInterface
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(\DateTimeInterface $duration): self
+    {
+        $this->duration = $duration;
+
+        return $this;
+    }
+
+    public function getOrganizer(): ?User
+    {
+        return $this->organizer;
+    }
+
+    public function setOrganizer(?User $organizer): self
+    {
+        $this->organizer = $organizer;
 
         return $this;
     }

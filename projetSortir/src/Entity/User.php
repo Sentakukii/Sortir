@@ -63,20 +63,23 @@ class User implements UserInterface
      */
     private $site;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Event", inversedBy="organizer")
-     */
-    private $eventsOrganized;
+
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Event", inversedBy="usersList")
      */
     private $eventsList;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="organizer")
+     */
+    private $eventsOrganized;
+
     public function __construct()
     {
         $this->eventsList = new ArrayCollection();
         $this->setActive(true);
+        $this->eventsOrganized = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -217,17 +220,7 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getEventsOrganized(): ?Event
-    {
-        return $this->eventsOrganized;
-    }
 
-    public function setEventsOrganized(?Event $eventsOrganized): self
-    {
-        $this->eventsOrganized = $eventsOrganized;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Event[]
@@ -250,6 +243,40 @@ class User implements UserInterface
     {
         if ($this->eventsList->contains($eventsList)) {
             $this->eventsList->removeElement($eventsList);
+        }
+
+        return $this;
+    }
+    public function __toString(): string{
+        return $this->getName()." ".$this->getFirstName();
+    }
+
+    /**
+     * @return Collection|Event[]
+     */
+    public function getEventsOrganized(): Collection
+    {
+        return $this->eventsOrganized;
+    }
+
+    public function addEventsOrganized(Event $eventsOrganized): self
+    {
+        if (!$this->eventsOrganized->contains($eventsOrganized)) {
+            $this->eventsOrganized[] = $eventsOrganized;
+            $eventsOrganized->setOrganizer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventsOrganized(Event $eventsOrganized): self
+    {
+        if ($this->eventsOrganized->contains($eventsOrganized)) {
+            $this->eventsOrganized->removeElement($eventsOrganized);
+            // set the owning side to null (unless already changed)
+            if ($eventsOrganized->getOrganizer() === $this) {
+                $eventsOrganized->setOrganizer(null);
+            }
         }
 
         return $this;
