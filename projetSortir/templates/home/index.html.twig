@@ -9,7 +9,12 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ app.user.firstName }} {{ app.user.name }}! ✅</h1>
+    {% if app.user %}
+        <div class="mb-3">
+            Vous êtes connecter avec {{ app.user.username }}, <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        </div>
+    {% endif %}
 
     This friendly message is coming from:
     <ul>
