@@ -77,3 +77,9 @@ table{
     overflow: auto;
 }
 
+.image_profile{
+    position:absolute;
+    height: 15em;
+    top:10em;
+    left:10%;
+}
