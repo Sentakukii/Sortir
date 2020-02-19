@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\City;
 use App\Entity\Site;
 use App\Entity\User;
 use Doctrine\DBAL\Types\TextType;
@@ -46,9 +47,9 @@ class RegistrationFormType extends AbstractType
             ->add('firstName', null, [
                 'label' => 'Prénom : ',
             ])
-            ->add('site',  null, [
-                'data_class' => Site::class,
-                'label' => 'Site : ',
+            ->add('city',  null, [
+                'data_class' => City::class,
+                'label' => 'Ville : ',
             ])
             ->add('save', SubmitType::class, [
                  'label' => 'Enregistrer',

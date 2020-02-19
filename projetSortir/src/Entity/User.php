@@ -247,9 +247,7 @@ class User implements UserInterface
 
         return $this;
     }
-    public function __toString(): string{
-        return $this->getName()." ".$this->getFirstName();
-    }
+
 
     /**
      * @return Collection|Event[]
@@ -280,5 +278,8 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+    public function __toString(): string{
+        return $this->getName()." ".$this->getFirstName();
     }
 }

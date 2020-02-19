@@ -28,8 +28,6 @@ class Event
      */
     private $date;
 
-
-
     /**
      * @ORM\Column(type="datetime")
      */

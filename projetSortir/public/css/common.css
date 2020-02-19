@@ -72,3 +72,8 @@ table{
     transform: rotate(45deg);
 }
 
+#table_home{
+    max-height: 350px;
+    overflow: auto;
+}
+

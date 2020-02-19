@@ -26,7 +26,7 @@ class Location
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $adress;
+    private $address;
 
     /**
      * @ORM\Column(type="float")
@@ -70,14 +70,14 @@ class Location
         return $this;
     }
 
-    public function getAdress(): ?string
+    public function getAddress(): ?string
     {
-        return $this->adress;
+        return $this->Address;
     }
 
-    public function setAdress(string $adress): self
+    public function setAddress(string $Address): self
     {
-        $this->adress = $adress;
+        $this->Address = $Address;
 
         return $this;
     }
@@ -148,4 +148,9 @@ class Location
 
         return $this;
     }
+    function __toString()
+    {
+     return $this->getName();
+    }
+
 }

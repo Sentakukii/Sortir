@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block body %}
+    <div class="container">
+        {{ form(form) }}
+    </div>
+
+    {#
+
+    <div class="container">
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row">
+                    {{ form_label(form.name, null , {'label_attr': {'class': 'col-md-4'}}) }}
+                    {{ form_errors(form.name) }}
+                    {{ form_widget(form.name , {'attr': {'class': 'col-md-4'}} ) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <span>  ville Organisatrice :</span>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.date) }}
+                {{ form_errors(form.date) }}
+                {{ form_widget(form.date) }}
+            </div>
+            <div class="col-md-6">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_label(form.limitInscription) }}
+                {{ form_errors(form.limitInscription) }}
+                {{ form_widget(form.limitInscription) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_label(form.location) }}
+                {{ form_errors(form.location) }}
+                {{ form_widget(form.location) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+    #}
+
+{% endblock %}
