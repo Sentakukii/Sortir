@@ -40,9 +40,6 @@ class ProfilType extends AbstractType
             ->add('site', null, [
                 'label' => 'Ville de rattachement : ',
             ])
-            ->add('save', SubmitType::class, [
-                'label' => 'Enregistrer',
-            ])
         ;
     }
 
