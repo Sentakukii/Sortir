@@ -81,11 +81,13 @@
                     <td>{{ event.getName() }}</td>
                     <td>{{ event.getDate()|date("d/m/Y H:m:s") }}</td>
                     <td>{{ event.getLimitInscription()|date("d/m/Y") }}</td>
-                    <td>{{ event.getUsersList()|length }}/{{ event.getMaxInscriptions() }}</td>
+                    <td><span id="nbRegister{{ event.getId() }}">{{ event.getUsersList()|length }}</span>/{{ event.getMaxInscriptions() }}</td>
                     <td>{{ event.getState()}}</td>
                     <td>
                         {% if event in app.user.eventsList  %}
-                        <div class="cross"></div>
+                            <div id="cross_menu_{{ event.getId() }}" class="cross"></div>
+                        {% else %}
+                            <div id="cross_menu_{{ event.getId() }}" class="cross hide"></div>
                         {% endif %}
                     </td>
                     <td>{{ event.getOrganizer() }}</td>
@@ -104,12 +106,14 @@
                             {% endif %}
                         {% else %}
                             <a href="">Afficher</a>
-                            {% if event in app.user.eventsList  %}
+                            {% if event in app.user.eventsList %}
                                 <span>-</span>
                                 <a href="">Se désiter</a>
                             {% else %}
-                                <span>-</span>
-                                <a href="">S'inscrire</a>
+                                {% if event.getUsersList()|length != event.getMaxInscriptions() %}
+                                    <span>-</span>
+                                    <a href="javascript:void(0)" onclick="registerEvent({{ event.getId() }}, '{{ url('register') }}')">S'inscrire</a>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
                     </td>
@@ -119,5 +123,23 @@
         </table>
     </div>
     <button class="btn btn-primary" onclick="window.location='{{ path('eventEdit') }}';">Créer une sortie</button>
+
+    <script>
+        function registerEvent(eventId, url) {
+            $.ajax({
+                url : url,
+                type : 'POST',
+                data: 'eventId='+eventId,
+                success : function(json, status){
+                    console.log("success: "+JSON.stringify(json,null,2));
+                    document.getElementById("nbRegister"+eventId).innerHTML = json.success;
+                    document.getElementById("cross_menu_"+eventId).classList.remove('hide');
+                },
+                error : function(res, status, error){
+                    console.log("error: "+error);
+                }
+            });
+        }
+    </script>
 
 {% endblock %}
