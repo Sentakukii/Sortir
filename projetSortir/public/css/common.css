@@ -72,6 +72,27 @@ table{
     transform: rotate(45deg);
 }
 
+.cross.plus, .cross.minus{
+    position: absolute;
+    top: 40%;
+    left: 43%;
+    cursor: pointer;
+}
+
+.cross.plus:hover, .cross.minus:hover{
+    background-color: black;
+}
+
+.cross.plus::after, .cross.minus::after{
+    transform: rotate(90deg);
+}
+.cross.plus::before{
+    transform: rotate(90deg);
+}
+
+.cross.minus::before {
+    display: none;
+}
 #table_home{
     max-height: 350px;
     overflow: auto;
@@ -82,4 +103,12 @@ table{
     height: 15em;
     top:10em;
     left:10%;
+}
+
+.hide{
+    display: none;
+}
+
+#buttonList{
+    text-align: center;
 }

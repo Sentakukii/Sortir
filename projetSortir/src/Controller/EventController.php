@@ -35,6 +35,14 @@ class EventController extends AbstractController
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
         $cities = $em->getRepository(City::class)->findAll();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $city = $form->get('city')->getData();
+            // TODO: Implement custom process!
+
+            dump('coucou');
+        }
+
         return $this->render('event/edit.html.twig', [
             'form' => $form->createView(),
             'cities' => $cities,

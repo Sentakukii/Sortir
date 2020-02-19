@@ -5,14 +5,15 @@ namespace App\Form;
 use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\Site;
+use App\Entity\State;
 use App\Entity\User;
-use Doctrine\DBAL\Types\TextType;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -43,8 +44,8 @@ class EventFormType extends AbstractType
             ->add('description',null, [
                 'label' => 'Description et infos : ',
             ])
-            ->add('location',null, [
-                'label' => 'Lieux : ',
+            ->add('site',null, [
+                'label' => 'Ville organisatrice  : ',
             ])
             ->add('city',  EntityType::class, [
                 'mapped' => false ,
@@ -53,6 +54,36 @@ class EventFormType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Ville : '
             ])
+            ->add('location',null, [
+                'label' => 'Lieux : ',
+            ])
+            ->add('location_label', TextType::class,[
+                'mapped' =>false,
+                'label' => 'Lieux : ',
+            ])
+            ->add('address', TextType::class,[
+                'mapped' => false,
+                'label' => 'Adresse : ',
+            ])
+            ->add('postalCode', TextType::class,[
+                'mapped' => false,
+                'label' => 'Code postal : ',
+            ])
+            ->add('latitude', TextType::class,[
+                'mapped' => false,
+                'label' => 'Latitude : ',
+            ]) ->add('longitude', TextType::class,[
+                'mapped' => false,
+                'label' => 'Longitude : ',
+            ])
+            ->add('state',EntityType::class, [
+                'mapped' => false ,
+                'required' => true,
+                'class' => State::class,
+                'choice_label' => 'denomination',
+                'label' => 'état : '
+            ])
+
         ;
 
 //        $builder->get("city")->addEventListener(

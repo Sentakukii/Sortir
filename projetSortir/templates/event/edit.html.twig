@@ -4,8 +4,85 @@
 
 {% block body %}
     <div class="container">
-        {{ form(form) }}
+        {{ form_start(form ,  {'attr': {'id': 'form_event'} }) }}
+        <div class="row">
+             <div class="col-md-6">
+                 {{ form_row(form.name,  {'attr': {'class': 'col-md-5'} }) }}
+                 {{ form_row(form.date , {'attr': {'class': 'col-md-10'} })}}
+                 {{ form_row(form.limitInscription) }}
+                 {{ form_row(form.maxInscriptions,  {'attr': {'class': 'col-md-2'} }) }}
+                 {{ form_row(form.duration) }}
+                 {{ form_row(form.description) }}
+
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.site,  {'attr': {'class': 'col-md-5'} }) }}
+                {{ form_row(form.city,  {'attr': {'class': 'col-md-5'} }) }}
+                <div  class="select_location">
+                {{ form_row(form.location,  {'attr': {'class': 'col-md-5'} }) }}
+                </div>
+                <div class="add_location hide">
+                {{ form_row(form.location_label,  {'attr': {'class': 'col-md-5'} }) }}
+                </div>
+                <div id="cross_plus" class="cross plus" onclick="changeMode()"></div>
+                <div class="row add_location hide">
+                    {{ form_row(form.address,  {'attr': {'class': 'col-md-10'} }) }}
+                    {{ form_row(form.postalCode,  {'attr': {'class': 'col-md-10'} }) }}
+                    {{ form_row(form.latitude,  {'attr': {'class': 'col-md-10'} }) }}
+                    {{ form_row(form.longitude,  {'attr': {'class': 'col-md-10'} }) }}
+                </div>
+            </div>
+        </div>
+        <div id="buttonList">
+            <input class="btn btn-primary" type="button" onclick="submitForm()"  value="Créer"/>
+            <input class="btn btn-primary offset-md-2" type="button" onclick="submitForm()"  value="Publier la sortie"/>
+            {% if app.request.query.get('id') != null %}
+            <input class="btn btn-primary offset-md-2" type="button"  value="Supprimer la sortie"/>
+            {% endif %}
+            <input class="btn btn-primary offset-md-2" type="button"  value="Annuler"/>
+
+        </div>
+        <div>
+            {{ form_row(form.state,  {'attr': {'class': 'hide'} }) }}
+        </div>
+        {{ form_end(form) }}
     </div>
+
+    <script>
+
+        function submitForm(){
+            document.getElementById("etat_event").
+            document.getElementById("form_event").submit();
+        }
+
+        function changeMode(){
+            var selects = document.getElementsByClassName("select_location");
+            var adds = document.getElementsByClassName(("add_location"));
+            var cross = document.getElementById("cross_plus");
+
+            if(selects[0].classList.contains("hide")) {
+                for (var i = 0; i < adds.length ; i++) {
+                    adds[i].classList.add("hide")
+                }
+                for (var i = 0; i < selects.length ; i++) {
+                    selects[i].classList.remove("hide")
+                }
+                cross.classList.add("plus");
+                cross.classList.remove("minus");
+            }else{
+                for (var i = 0; i < selects.length ; i++) {
+                    selects[i].classList.add("hide")
+                }
+                for (var i = 0; i < adds.length ; i++) {
+                    adds[i].classList.remove("hide")
+                }
+
+                cross.classList.add("minus");
+                cross.classList.remove("plus");
+            }
+        }
+    </script>
+
 
     {#
 
