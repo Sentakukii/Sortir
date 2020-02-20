@@ -34,24 +34,24 @@
             </div>
         </div>
         <div id="buttonList">
-            <input class="btn btn-primary" type="button" onclick="submitForm()"  value="Créer"/>
-            <input class="btn btn-primary offset-md-2" type="button" onclick="submitForm()"  value="Publier la sortie"/>
+            <input class="btn btn-primary" type="button" onclick="submitForm(0)"  value="Créer"/>
+            <input class="btn btn-primary offset-md-2" type="button" onclick="submitForm(1)"  value="Publier la sortie"/>
             {% if app.request.query.get('id') != null %}
             <input class="btn btn-primary offset-md-2" type="button"  value="Supprimer la sortie"/>
             {% endif %}
             <input class="btn btn-primary offset-md-2" type="button"  value="Annuler"/>
 
         </div>
-        <div>
-            {{ form_row(form.state,  {'attr': {'class': 'hide'} }) }}
+        <div class="hide">
+            {{ form_row(form.state) }}
         </div>
         {{ form_end(form) }}
     </div>
 
     <script>
 
-        function submitForm(){
-            document.getElementById("etat_event").
+        function submitForm(index){
+            document.getElementById("event_form_state").selectedIndex = index;
             document.getElementById("form_event").submit();
         }
 
@@ -59,7 +59,9 @@
             var selects = document.getElementsByClassName("select_location");
             var adds = document.getElementsByClassName(("add_location"));
             var cross = document.getElementById("cross_plus");
+            var type = document.getElementById("event_form_type");
 
+            //switch to add location
             if(selects[0].classList.contains("hide")) {
                 for (var i = 0; i < adds.length ; i++) {
                     adds[i].classList.add("hide")
@@ -67,8 +69,17 @@
                 for (var i = 0; i < selects.length ; i++) {
                     selects[i].classList.remove("hide")
                 }
+                var inputs = $('.add_location input');
+                //var inputs = adds.getElementsByTagName('input');
+                for (var i = 0 ; i < inputs.length ; i++){
+                    inputs[i].value="";
+                }
+                type.value = 0;
+
                 cross.classList.add("plus");
                 cross.classList.remove("minus");
+
+            //switch to select location
             }else{
                 for (var i = 0; i < selects.length ; i++) {
                     selects[i].classList.add("hide")
@@ -76,55 +87,12 @@
                 for (var i = 0; i < adds.length ; i++) {
                     adds[i].classList.remove("hide")
                 }
+                type.value = 1;
 
                 cross.classList.add("minus");
                 cross.classList.remove("plus");
             }
         }
     </script>
-
-
-    {#
-
-    <div class="container">
-        {{ form_start(form) }}
-        <div class="row">
-            <div class="col-md-6">
-                <div class="row">
-                    {{ form_label(form.name, null , {'label_attr': {'class': 'col-md-4'}}) }}
-                    {{ form_errors(form.name) }}
-                    {{ form_widget(form.name , {'attr': {'class': 'col-md-4'}} ) }}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <span>  ville Organisatrice :</span>
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_label(form.date) }}
-                {{ form_errors(form.date) }}
-                {{ form_widget(form.date) }}
-            </div>
-            <div class="col-md-6">
-
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_label(form.limitInscription) }}
-                {{ form_errors(form.limitInscription) }}
-                {{ form_widget(form.limitInscription) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_label(form.location) }}
-                {{ form_errors(form.location) }}
-                {{ form_widget(form.location) }}
-            </div>
-        </div>
-        {{ form_end(form) }}
-    </div>
-    #}
 
 {% endblock %}

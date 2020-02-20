@@ -9,6 +9,16 @@
     <body>
     <div id="container">
         {% block menu %}{% include 'menu.html.twig' %}{% endblock %}
+        <div id="flash_messages">
+            {% for type , messages in app.flashes%}
+                {% for message in messages %}
+                    <div class="col-md-5 offset-md-7 alert alert-{{type}}" role="alert">
+                        {{ message }}
+                    </div>
+                    <br/>
+                {% endfor %}
+            {% endfor %}
+        </div>
         {% block body %}{% endblock %}
     </div>
     <script

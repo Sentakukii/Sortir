@@ -45,11 +45,13 @@ class ProfilController extends AbstractController
                 )
             );
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+           // $entityManager = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
 
             // do anything else you need here, like send an email
+
+            $this->addFlash("success", "Profil modifié"); // info warning error
 
             return $this->redirectToRoute('home');
         }
