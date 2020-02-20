@@ -94,7 +94,7 @@
                     <td>
                         {% if event in app.user.eventsOrganized  %}
                             {% if event.getState() == "Créée"  %}
-                                <a href="">Modifier</a>
+                                <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
                                 <span>-</span>
                                 <a href="">Publier</a>
                             {% else %}
@@ -106,13 +106,15 @@
                             {% endif %}
                         {% else %}
                             <a href="">Afficher</a>
-                            {% if event in app.user.eventsList %}
-                                <span>-</span>
-                                <a id="register_button_{{ event.id }}" href="javascript:void(0)"  onclick="deregisterEvent({{ event.getId() }})">Se désister</a>
-                            {% else %}
-                                {% if event.getUsersList()|length != event.getMaxInscriptions() %}
+                            {% if date(event.getLimitInscription()) > date()  and event.getState() == "Ouverte" %}
+                                {% if event in app.user.eventsList %}
                                     <span>-</span>
-                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }})">S'inscrire</a>
+                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)"  onclick="deregisterEvent({{ event.getId() }}, '{{ url('deregister') }}')">Se désister</a>
+                                {% else %}
+                                    {% if event.getUsersList()|length != event.getMaxInscriptions() %}
+                                        <span>-</span>
+                                        <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }}, '{{ url('register') }}')">S'inscrire</a>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         {% endif %}
@@ -124,74 +126,7 @@
     </div>
     <button class="btn btn-primary" onclick="window.location='{{ path('eventEdit') }}';">Créer une sortie</button>
 
-    <script>
-        if (typeof App === typeof undefined) {
-            var App = {};
-        }
-
-        if (typeof App.Flash === typeof undefined) {
-            App.Flash = function () {
-                function getContainer() {
-                    return document.getElementById("flash_messages");
-                }
-
-                function make(type, msg) {
-                    var div = document.createElement('div');
-
-                    div.className = 'col-md-5 offset-md-7 alert alert-' + type;
-                    div.textContent = msg;
-                    getContainer().innerHTML="";
-                    getContainer().append(div);
-                }
-
-                return ['success', 'danger', 'warning', 'info']
-                        .reduce(function (acc, elt) {
-                            acc[elt] = function (msg) { make(elt, msg) };
-                            return acc;
-                        }, {});
-            };
-        }
-
-        function registerEvent(eventId) {
-            $.ajax({
-                url : '{{ url('register') }}',
-                type : 'POST',
-                data: 'eventId='+eventId,
-                success : function(json, status){
-                    (new App.Flash()).success(json.msg);
-                    document.getElementById("nbRegister_"+eventId).textContent = json.nbRegister;
-                    document.getElementById("cross_menu_"+eventId).classList.remove('hide');
-                    var registerButton = document.getElementById("register_button_"+eventId);
-                    registerButton.textContent = "Se désister";
-                    registerButton.onclick = function(){deregisterEvent(eventId)};
-                },
-                error : function(json, status){
-                    (new App.Flash()).danger(json.msg);
-                    document.getElementById("nbRegister_"+eventId).textContent = json.nbRegister;
-                }
-            });
-        }
-
-        function deregisterEvent(eventId) {
-            $.ajax({
-                url : '{{ url('deregister') }}',
-                type : 'POST',
-                data: 'eventId='+eventId,
-                success : function(json, status){
-                    (new App.Flash()).success(json.msg);
-                    document.getElementById("nbRegister_"+eventId).innerHTML = json.success;
-                    document.getElementById("cross_menu_"+eventId).classList.add('hide');
-                    var registerButton = document.getElementById("register_button_"+eventId);
-                    registerButton.textContent = "S'inscrire";
-                    registerButton.onclick = function(){registerEvent(eventId)};
-                },
-                error : function(json, status, error, res){
-                    console.log(json);
-                    (new App.Flash()).danger(json.msg);
-                    document.getElementById("nbRegister_"+eventId).textContent = json.nbRegister;
-                }
-            });
-        }
-    </script>
-
 {% endblock %}
+
+{% block javascripts %} <script src=" {{ asset('js/home.js') }} " ></script> {% endblock %}
+

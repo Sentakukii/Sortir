@@ -43,7 +43,11 @@ class EventController extends AbstractController
     public function edit(EntityManagerInterface $em, Request $request)
     {
 
-        $event = new Event();
+        if ($request->query->get('eventId') != null) {
+            $event = $em->getRepository(Event::class)->find($request->query->get('eventId'));
+        } else {
+            $event = new Event();
+        }
         $form = $this->createForm(EventFormType::class, $event);
         $form->handleRequest($request);
         $cities = $em->getRepository(City::class)->findAll();
@@ -91,7 +95,10 @@ class EventController extends AbstractController
                     $em->persist($event);
                     $em->flush();
                     if ($state->getId() == 1) {
-                        $this->addFlash("success", "Sortie crée"); // info warning error
+                        if ($request->query->get('eventId') != null)
+                            $this->addFlash("success", "Sortie modifié");
+                        else
+                            $this->addFlash("success", "Sortie crée");
                     } else if ($state->getId() == 2) {
                         $this->addFlash("success", "Sortie publier");
                     } else {

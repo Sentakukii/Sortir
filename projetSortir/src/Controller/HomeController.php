@@ -48,11 +48,15 @@ class HomeController extends AbstractController
         $response = new JsonResponse();
         $event = $eventRepository->find($request->request->get('eventId'));
 
-        if (sizeof($event->getUsersList()) == $event->getMaxInscriptions()) {
-            $response->setContent(json_encode(['msg' => 'Nombre maximum d\'inscrits atteint', 'nbRegister' => sizeof($event->getUsersList())]));
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-        } else if($event->getUsersList()->contains($this->security->getUser())) {
+
+        if($event->getUsersList()->contains($this->security->getUser())) {
             $response->setContent(json_encode(['msg' => 'Vous êtes déjà inscrit', 'nbRegister' => sizeof($event->getUsersList())]));
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        }else if ($event->getLimitInscription() <  new \DateTime()){
+            $response->setContent(json_encode(['msg' => 'La date d\'inscription est dépassé', 'nbRegister' => sizeof($event->getUsersList())]));
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        } else if (sizeof($event->getUsersList()) == $event->getMaxInscriptions()) {
+            $response->setContent(json_encode(['msg' => 'Nombre maximum d\'inscrits atteint', 'nbRegister' => sizeof($event->getUsersList())]));
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else {
             $event->addUsersList($this->security->getUser());

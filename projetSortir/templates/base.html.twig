@@ -16,6 +16,10 @@
                 crossorigin="anonymous"></script>
         <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src=" {{ asset('js/common.js') }} " ></script>
+
+
+        {% block javascripts %}{% endblock %}
     </head>
     <body>
     <div id="container">
@@ -35,6 +39,6 @@
         </div>
         {% block body %}{% endblock %}
     </div>
-        {% block javascripts %}{% endblock %}
+
     </body>
 </html>
