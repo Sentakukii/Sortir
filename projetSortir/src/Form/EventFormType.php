@@ -62,10 +62,12 @@ class EventFormType extends AbstractType
             ->add('city_label', TextType::class,[
                 'mapped' =>false,
                 'label' => 'Ville : ',
+                'required' => false,
             ])
             ->add('postalCode', TextType::class,[
                 'mapped' => false,
                 'label' => 'Code postal : ',
+                'required' => false,
             ])
             ->add('location',null, [
                 'label' => 'Lieux : ',
@@ -73,17 +75,21 @@ class EventFormType extends AbstractType
             ->add('location_label', TextType::class,[
                 'mapped' =>false,
                 'label' => 'Lieux : ',
+                'required' => false,
             ])
             ->add('address', TextType::class,[
                 'mapped' => false,
                 'label' => 'Adresse : ',
+                'required' => false,
             ])
             ->add('latitude', TextType::class,[
                 'mapped' => false,
                 'label' => 'Latitude : ',
+                'required' => false,
             ]) ->add('longitude', TextType::class,[
                 'mapped' => false,
                 'label' => 'Longitude : ',
+                'required' => false,
             ])
             ->add('state',EntityType::class, [
                 'mapped' => false ,

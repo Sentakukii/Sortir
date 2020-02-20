@@ -19,6 +19,23 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+
+    /**
+     * @param $filter  where condition
+     * @return mixed
+     */
+    public function findwithFilter($filter)
+    {
+        $em = $this->getEntityManager();
+
+        $query = $em->createQuery("
+            SELECT e
+            FROM App\Entity\Event e 
+            WHERE ".$filter);
+        $result = $query->getResult();
+        return $result;
+    }
+
     // /**
     //  * @return Event[] Returns an array of Event objects
     //  */

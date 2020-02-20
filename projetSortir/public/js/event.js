@@ -1,8 +1,5 @@
 
-$( document ).ready(function() {
-    // you may need to change this code if you are not using Bootstrap Datepicker
-    $(".js-datepicker").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
-});
+
 
 function submitForm(index){
     document.getElementById("event_form_state").selectedIndex = index;

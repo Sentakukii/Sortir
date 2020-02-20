@@ -34,9 +34,10 @@ class HomeController extends AbstractController
      */
     public function index(SiteRepository $siteRepo, EventRepository $eventRepo)
     {
+        $events = $eventRepo->findAll();
         return $this->render('home/index.html.twig', array(
             'sites' => $siteRepo->findAll(),
-            'events' => $eventRepo->findAll()
+            'events' => $events
         ));
     }
 

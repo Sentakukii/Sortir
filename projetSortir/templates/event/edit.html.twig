@@ -8,8 +8,8 @@
         <div class="row">
              <div class="col-md-6">
                  {{ form_row(form.name,  {'attr': {'class': 'col-md-5'} }) }}
-                 {{ form_row(form.date , {'attr': {'class': 'col-md-5 js-datepicker'} })}}
-                 {{ form_row(form.limitInscription ,{'attr' : {'class' : 'col-md-5 js-datepicker'} }) }}
+                 {{ form_row(form.date , {'attr': {'class': 'col-md-5 js-datepicker event_form_date'} })}}
+                 {{ form_row(form.limitInscription ,{'attr' : {'class' : 'col-md-5 js-datepicker event_form_date'} }) }}
                  {{ form_row(form.maxInscriptions,  {'attr': {'class': 'col-md-2'} }) }}
                  {{ form_row(form.duration) }}
                  {{ form_row(form.description) }}
@@ -61,4 +61,11 @@
 
 {% endblock %}
 
-{% block javascripts %} <script src=" {{ asset('js/event.js') }} " ></script> {% endblock %}
+{% block javascripts %}
+    <script src=" {{ asset('js/event.js') }} " ></script>
+    <script>  $( document ).ready(function() {
+            // you may need to change this code if you are not using Bootstrap Datepicker
+            $(".js-datepicker").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+        });
+    </script>
+{% endblock %}

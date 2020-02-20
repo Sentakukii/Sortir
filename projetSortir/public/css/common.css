@@ -116,6 +116,12 @@ table{
 .alert{
     text-align: center;
 }
-.switch_div{
+.switch_div {
     position: relative;
+}
+.event_form_date{
+   background-image: url("/img/calendar.png");
+    background-size: 30px;
+    background-repeat: no-repeat;
+    background-position: 97%;
 }
