@@ -17,17 +17,29 @@
             </div>
             <div class="col-md-6">
                 {{ form_row(form.site,  {'attr': {'class': 'col-md-5'} }) }}
-                {{ form_row(form.city,  {'attr': {'class': 'col-md-5'} }) }}
-                <div  class="select_location">
-                {{ form_row(form.location,  {'attr': {'class': 'col-md-5'} }) }}
+                <div class="switch_div">
+                    <div  class="select_city">
+                        {{ form_row(form.city,  {'attr': {'class': 'col-md-5'} }) }}
+                    </div>
+                    <div class="add_city hide">
+                        {{ form_row(form.city_label,  {'attr': {'class': 'col-md-5'} }) }}
+                    </div>
+                    <div id="cross_plus_city" class="cross plus" onclick="switchModeCity()"></div>
                 </div>
-                <div class="add_location hide">
-                {{ form_row(form.location_label,  {'attr': {'class': 'col-md-5'} }) }}
+                <div class="add_city hide">
+                    {{ form_row(form.postalCode,  {'attr': {'class': 'col-md-5'} }) }}
                 </div>
-                <div id="cross_plus" class="cross plus" onclick="changeMode()"></div>
+                <div class="switch_div">
+                    <div  class="select_location">
+                        {{ form_row(form.location,  {'attr': {'class': 'col-md-5'} }) }}
+                    </div>
+                    <div class="add_location hide">
+                        {{ form_row(form.location_label,  {'attr': {'class': 'col-md-5'} }) }}
+                    </div>
+                    <div id="cross_plus_location" class="cross plus" onclick="switchModeLocation()"></div>
+                </div>
                 <div class="row add_location hide">
                     {{ form_row(form.address,  {'attr': {'class': 'col-md-10'} }) }}
-                    {{ form_row(form.postalCode,  {'attr': {'class': 'col-md-10'} }) }}
                     {{ form_row(form.latitude,  {'attr': {'class': 'col-md-10'} }) }}
                     {{ form_row(form.longitude,  {'attr': {'class': 'col-md-10'} }) }}
                 </div>
@@ -55,14 +67,37 @@
             document.getElementById("form_event").submit();
         }
 
-        function changeMode(){
+
+        function switchModeLocation(){
+
+            if(document.getElementsByClassName("select_location")[0].classList.contains("hide")) {
+                changeModeLocation(0);
+            }else {
+                changeModeLocation(1);
+            }
+        }
+        function switchModeCity(){
+
+            if(document.getElementsByClassName("select_city")[0].classList.contains("hide")) {
+                changeModeCity(0);
+            }else {
+                changeModeCity(1);
+            }
+        }
+
+
+            /**
+             *
+             * @param mode   0 = switch to select location  1 =  switch to add location
+             */
+            function changeModeLocation(mode){
             var selects = document.getElementsByClassName("select_location");
             var adds = document.getElementsByClassName(("add_location"));
-            var cross = document.getElementById("cross_plus");
-            var type = document.getElementById("event_form_type");
+            var cross = document.getElementById("cross_plus_location");
+            var type = document.getElementById("event_form_type_location");
 
-            //switch to add location
-            if(selects[0].classList.contains("hide")) {
+            //switch to select location and city
+            if(mode == 0) {
                 for (var i = 0; i < adds.length ; i++) {
                     adds[i].classList.add("hide")
                 }
@@ -70,17 +105,18 @@
                     selects[i].classList.remove("hide")
                 }
                 var inputs = $('.add_location input');
-                //var inputs = adds.getElementsByTagName('input');
                 for (var i = 0 ; i < inputs.length ; i++){
                     inputs[i].value="";
                 }
                 type.value = 0;
 
+                changeModeCity(0);
+
                 cross.classList.add("plus");
                 cross.classList.remove("minus");
 
-            //switch to select location
-            }else{
+            //switch to add location
+            }else if (mode == 1){
                 for (var i = 0; i < selects.length ; i++) {
                     selects[i].classList.add("hide")
                 }
@@ -92,6 +128,50 @@
                 cross.classList.add("minus");
                 cross.classList.remove("plus");
             }
+        }
+
+        /**
+         *
+         * @param mode   0 = switch to add city  1 =  switch to select city
+         */
+        function changeModeCity(mode){
+            var selects = document.getElementsByClassName("select_city");
+            var adds = document.getElementsByClassName(("add_city"));
+            var cross = document.getElementById("cross_plus_city");
+            var type = document.getElementById("event_form_type_city");
+
+            //switch to add city
+            if(mode==0) {
+                for (var i = 0; i < adds.length ; i++) {
+                    adds[i].classList.add("hide")
+                }
+                for (var i = 0; i < selects.length ; i++) {
+                    selects[i].classList.remove("hide")
+                }
+                var inputs = $('.add_city input');
+                for (var i = 0 ; i < inputs.length ; i++){
+                    inputs[i].value="";
+                }
+                type.value = 0;
+
+                cross.classList.add("plus");
+                cross.classList.remove("minus");
+
+                //switch to add city and location
+            }else if (mode == 1){
+                for (var i = 0; i < selects.length ; i++) {
+                    selects[i].classList.add("hide")
+                }
+                for (var i = 0; i < adds.length ; i++) {
+                    adds[i].classList.remove("hide")
+                }
+                type.value = 1;
+
+                changeModeLocation(1);
+                cross.classList.add("minus");
+                cross.classList.remove("plus");
+            }
+
         }
     </script>
 

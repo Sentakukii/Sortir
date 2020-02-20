@@ -74,7 +74,7 @@ table{
 
 .cross.plus, .cross.minus{
     position: absolute;
-    top: 40%;
+    top: 60%;
     left: 43%;
     cursor: pointer;
 }
@@ -93,6 +93,7 @@ table{
 .cross.minus::before {
     display: none;
 }
+
 #table_home{
     max-height: 350px;
     overflow: auto;
@@ -114,4 +115,7 @@ table{
 }
 .alert{
     text-align: center;
+}
+.switch_div{
+    position: relative;
 }

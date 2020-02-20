@@ -49,34 +49,62 @@ class EventController extends AbstractController
         $cities = $em->getRepository(City::class)->findAll();
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $type = $form->get('type')->getData();
+            try {
+                $type_location = $form->get('type_location')->getData();
+                $type_city = $form->get('type_city')->getData();
+                $state = $form->get('state')->getData();
 
-            if ($type == "1"){
-                $location = new Location();
-                $location->setName($form->get('location_label')->getData());
-                $location->setCity($form->get('city')->getData());
-                $location->setAddress($form->get('address')->getData());
-              //  $location->set($form->get('postalCode')->getData());
-                $location->setLatitude((float)$form->get('latitude')->getData());
-                $location->setLongitude(((float)$form->get('longitude')->getData()));
-               /* $em->persist($location);
-                $em->flush();*/
-                $event->setLocation($location);
-            }
+                if ($type_city == "1" || $type_city == "0" && $type_location == "1" || $type_location == "0" && $state == 1 || $state == 2) {
+                    if($type_city == "1"){
+                        $city = new City();
+                        $city->setName((string)$form->get('city_label')->getData());
+                        $city->setPostalCode((string)$form->get('postalCode')->getData());
+                        $cityBDD = $em->getRepository(City::class)->findBy(['name' => $city->getName()]);
+                        if ($cityBDD != null){
+                           $city = $cityBDD;
+                        }else {
+                            $em->persist($city);
+                            $em->flush();
+                        }
+                    }else{
+                        $city = $form->get('city')->getData();
+                    }
+                    if ($type_location == "1" || $type_city =="1") {
+                        $location = new Location();
+                        $location->setName($form->get('location_label')->getData());
+                        $location->setCity($city);
+                        $location->setAddress($form->get('address')->getData());
+                        $location->setLatitude((float)$form->get('latitude')->getData());
+                        $location->setLongitude(((float)$form->get('longitude')->getData()));
+                        $locationBDD = $em->getRepository(Location::class)->findBy(['name' => $location->getName(), 'latitude' => $location->getLatitude(), 'longitude' => $location->getLongitude()]);
+                        if ($locationBDD != null){
+                            $location = $locationBDD;
+                        }else {
+                            $em->persist($location);
+                            $em->flush();
+                        }
+                        $event->setLocation($location);
+                    }
+                    $event->setOrganizer($this->security->getUser());
+                    $event->setState($state);
+                    $em->persist($event);
+                    $em->flush();
+                    if ($state->getId() == 1) {
+                        $this->addFlash("success", "Sortie crée"); // info warning error
+                    } else if ($state->getId() == 2) {
+                        $this->addFlash("success", "Sortie publier");
+                    } else {
+                        $this->addFlash("warning", "Sortie crée avec un état anormal !!");
+                    }
+                    return $this->redirectToRoute('home');
 
-            $state = $form->get('state')->getData();
-            $event->setOrganizer( $this->security->getUser());
-            $event->setState($state);
-            /*$em->persist($event);
-            $em->flush();*/
-            if($state->getId() == 1) {
-                $this->addFlash("success", "Sortie crée"); // info warning error
-            }else if($state->getId() == 2){
-                $this->addFlash("success", "Sortie publier");
-            }else{
-                $this->addFlash("warning", "Sortie crée avec un état anormal !!");
+                } else {
+                    $this->addFlash("error", "Paramètre anormal veuillez recharger la page");
+                }
+            }catch(\Exception $e){
+                $this->addFlash("error", "Erreur veuillez vérifier les champs");
+                $this->addFlash("error", $e->getMessage());
             }
-             return $this->redirectToRoute('home');
         }
 
         return $this->render('event/edit.html.twig', [

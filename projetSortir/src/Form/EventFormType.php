@@ -55,6 +55,14 @@ class EventFormType extends AbstractType
                 'choice_label' => 'name',
                 'label' => 'Ville : '
             ])
+            ->add('city_label', TextType::class,[
+                'mapped' =>false,
+                'label' => 'Ville : ',
+            ])
+            ->add('postalCode', TextType::class,[
+                'mapped' => false,
+                'label' => 'Code postal : ',
+            ])
             ->add('location',null, [
                 'label' => 'Lieux : ',
             ])
@@ -65,10 +73,6 @@ class EventFormType extends AbstractType
             ->add('address', TextType::class,[
                 'mapped' => false,
                 'label' => 'Adresse : ',
-            ])
-            ->add('postalCode', TextType::class,[
-                'mapped' => false,
-                'label' => 'Code postal : ',
             ])
             ->add('latitude', TextType::class,[
                 'mapped' => false,
@@ -85,7 +89,13 @@ class EventFormType extends AbstractType
                 'label' => 'état : '
             ])
             // 0 = select location   1 = add location
-            ->add('type',HiddenType::class, [
+            ->add('type_location',HiddenType::class, [
+                'mapped' => false,
+                'required' => false,
+                'data' => '0',
+            ])
+            // 0 = select city   1 = add city
+            ->add('type_city',HiddenType::class, [
                 'mapped' => false,
                 'required' => false,
                 'data' => '0',
