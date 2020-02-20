@@ -54,7 +54,8 @@ class EventController extends AbstractController
                 $type_city = $form->get('type_city')->getData();
                 $state = $form->get('state')->getData();
 
-                if ($type_city == "1" || $type_city == "0" && $type_location == "1" || $type_location == "0" && $state == 1 || $state == 2) {
+
+                if ($type_city == "1" || $type_city == "0" && $type_location == "1" || $type_location == "0" && $state->getId() == 1 || $state->getId() == 2) {
                     if($type_city == "1"){
                         $city = new City();
                         $city->setName((string)$form->get('city_label')->getData());

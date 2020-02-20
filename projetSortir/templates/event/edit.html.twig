@@ -8,12 +8,11 @@
         <div class="row">
              <div class="col-md-6">
                  {{ form_row(form.name,  {'attr': {'class': 'col-md-5'} }) }}
-                 {{ form_row(form.date , {'attr': {'class': 'col-md-10'} })}}
-                 {{ form_row(form.limitInscription) }}
+                 {{ form_row(form.date , {'attr': {'class': 'col-md-5 js-datepicker'} })}}
+                 {{ form_row(form.limitInscription ,{'attr' : {'class' : 'col-md-5 js-datepicker'} }) }}
                  {{ form_row(form.maxInscriptions,  {'attr': {'class': 'col-md-2'} }) }}
                  {{ form_row(form.duration) }}
                  {{ form_row(form.description) }}
-
             </div>
             <div class="col-md-6">
                 {{ form_row(form.site,  {'attr': {'class': 'col-md-5'} }) }}
@@ -62,12 +61,15 @@
 
     <script>
 
+        $( document ).ready(function() {
+            // you may need to change this code if you are not using Bootstrap Datepicker
+            $(".js-datepicker").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+        });
+
         function submitForm(index){
             document.getElementById("event_form_state").selectedIndex = index;
             document.getElementById("form_event").submit();
         }
-
-
         function switchModeLocation(){
 
             if(document.getElementsByClassName("select_location")[0].classList.contains("hide")) {

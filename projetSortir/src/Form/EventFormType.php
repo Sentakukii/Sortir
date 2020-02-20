@@ -31,9 +31,13 @@ class EventFormType extends AbstractType
                 'label' => 'Nom de la Sortie : ',
             ])
             ->add('date',null, [
+                'widget' => 'single_text',
+                'html5' => false,
                 'label' => 'Date et heure de la Sortie : ',
             ])
             ->add('limitInscription',null, [
+               'widget' => 'single_text',
+                'html5' => false,
                 'label' => 'Date limite d\'inscription : ',
             ])
             ->add('maxInscriptions',null, [
