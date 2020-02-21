@@ -35,7 +35,6 @@ function deregisterEvent(eventId ,url) {
             };
         },
         error: function (json, status, error, res) {
-            console.log(json);
             (new App.Flash()).danger(json.msg);
             document.getElementById("nbRegister_" + eventId).textContent = json.nbRegister;
         }

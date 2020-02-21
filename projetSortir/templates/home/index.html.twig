@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+
     <div id="personal-information" class="row">
         <div class="col-md-3 offset-md-9 text-right">
             <div id="today">
@@ -12,47 +14,46 @@
         </div>
     </div>
     <div class="row"><h2>Filtrer les sorties</h2></div>
-    <form id="search" action="">
+    <form id="search" action="" method="get">
         <div class="row">
             <div class="col-md-3">
                 <div class="row search_form_row">
                     <label class="col-md-7" for="site">Site : </label>
                     <select class="col-md-5" name="site" id="site">
-                        <option value="default">------</option>
                         {% for site in sites %}
-                            <option value="{{ site.getId() }}">{{ site.getName() }}</option>
+                            <option value="{{ site.id }}" {% if site.id == siteSelected.id %}selected="selected"{% endif %}>{{ site.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="row search_form_row">
                     <label class="col-md-7" for="search_text">Le nom de la sortie contient : </label>
-                    <input  class="col-md-5" type="text" id="search_text" name="search_text" placeholder="rechercher"/>
+                    <input  class="col-md-5" type="text" id="search_text" name="search_text" placeholder="rechercher" value="{{app.request.query.get('search_text')}}"/>
                 </div>
                 <div class="row search_form_row">
                     <label class="col-md-2" for="date_start">entre : </label>
                     <!-- WOOW holy shit! it's Amaziiing, it works-->
-                    <input  class="col-md-2.5" type="date" id="date_start" name="date_start"/>
+                    <input  class="col-md-2.5" type="date" id="date_start" name="date_start" value="{{app.request.query.get('date_start')}}"/>
                     <div class="col-md-1 text-center image_calendar">&nbsp;</div>
                     <span class="col-md-1 text-center"> et </span>
-                    <input  class="col-md-2.5" type="date" id="date_end" name="date_end"/>
+                    <input  class="col-md-2.5" type="date" id="date_end" name="date_end" value="{{app.request.query.get('date_end')}}"/>
                     <div class="col-md-1 text-center image_calendar">&nbsp;</div>
                 </div>
             </div>
             <div class="col-md-3 offset-md-1">
                 <div class="row search_form_row">
-                    <input name="checkbox_organizer" id="checkbox_organizer" type="checkbox" value="organizer">
+                    <input name="checkbox_organizer" id="checkbox_organizer" type="checkbox" value="organizer" {% if app.request.query.get('checkbox_organizer') %} checked {% endif %}>
                     <label class="checkbox_label" for="checkbox_organizer">&nbsp;Sorties dont je suis l'organisateur/trice</label>
                 </div>
                 <div class="row search_form_row">
-                    <input name="checkbox_participate" id="checkbox_participate" type="checkbox" value="participate">
+                    <input name="checkbox_participate" id="checkbox_participate" type="checkbox" value="participate" {% if app.request.query.get('checkbox_participate') %} checked {% endif %}>
                     <label class="checkbox_label" for="checkbox_participate">&nbsp;Sorties auxquelles je suis inscrit/e</label>
                 </div>
                 <div class="row search_form_row">
-                    <input name="checkbox_no_participate" id="checkbox_no_participate" type="checkbox" value="no_participate">
+                    <input name="checkbox_no_participate" id="checkbox_no_participate" type="checkbox" value="no_participate" {% if app.request.query.get('checkbox_no_participate') %} checked {% endif %}>
                     <label class="checkbox_label" for="checkbox_no_participate">&nbsp;Sorties auxquelles je suis pas inscrit/e</label>
                 </div>
                 <div class="row search_form_row">
-                    <input  name="checkbox_past" id="checkbox_past" type="checkbox" value="past">
+                    <input  name="checkbox_past" id="checkbox_past" type="checkbox" value="past" {% if app.request.query.get('checkbox_past') %} checked {% endif %}>
                     <label class="checkbox_label" for="checkbox_past">&nbsp;Sorties passées</label>
                 </div>
             </div>
@@ -124,7 +125,7 @@
             </tbody>
         </table>
     </div>
-    <button class="btn btn-primary" onclick="window.location='{{ path('eventEdit') }}';">Créer une sortie</button>
+    <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
 
 {% endblock %}
 

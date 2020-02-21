@@ -24,14 +24,16 @@ class EventRepository extends ServiceEntityRepository
      * @param $filter  where condition
      * @return mixed
      */
-    public function findwithFilter($filter)
+    public function findWithFilter($filter)
     {
         $em = $this->getEntityManager();
 
         $query = $em->createQuery("
             SELECT e
             FROM App\Entity\Event e 
+            LEFT JOIN e.usersList u
             WHERE ".$filter);
+
         $result = $query->getResult();
         return $result;
     }

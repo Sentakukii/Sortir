@@ -2,7 +2,7 @@ security:
     access_denied_url: /login
     encoders:
         App\Entity\User:
-            algorithm: auto
+            algorithm: 'bcrypt'
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -18,8 +18,9 @@ security:
         main:
             remember_me:
                 secret:   '%kernel.secret%'
-                lifetime: 604800 # 1 week in seconds
-                path: /home
+                lifetime: 31536000  # 1 week in seconds
+                path: /
+                domain:  ~
             anonymous: lazy
             guard:
                 authenticators:

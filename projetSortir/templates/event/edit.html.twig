@@ -66,6 +66,11 @@
     <script>  $( document ).ready(function() {
             // you may need to change this code if you are not using Bootstrap Datepicker
             $(".js-datepicker").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+
+            document.getElementById("event_form_city").onchange = function () {
+                getLocations(this , '{{ url('getLocations') }}');
+            };
+
         });
     </script>
 {% endblock %}

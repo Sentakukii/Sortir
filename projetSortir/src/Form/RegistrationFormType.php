@@ -47,9 +47,8 @@ class RegistrationFormType extends AbstractType
             ->add('firstName', null, [
                 'label' => 'Prénom : ',
             ])
-            ->add('city',  null, [
-                'data_class' => City::class,
-                'label' => 'Ville : ',
+            ->add('site', null,  [
+                'label' => 'Site : ',
             ])
             ->add('save', SubmitType::class, [
                  'label' => 'Enregistrer',
