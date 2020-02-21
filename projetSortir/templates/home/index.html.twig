@@ -78,7 +78,7 @@
             </thead>
             <tbody>
             {% for event in events %}
-                <tr>
+                <tr id="row_event_{{ event.id }}">
                     <td>{{ event.getName() }}</td>
                     <td>{{ event.getDate()|date("d/m/Y H:m:s") }}</td>
                     <td>{{ event.getLimitInscription()|date("d/m/Y") }}</td>
@@ -101,8 +101,10 @@
                             {% else %}
                                 <a href="">Afficher</a>
                                 {% if event.getState() == "Ouverte"  %}
-                                    <span>-</span>
-                                    <a href="">Annuler</a>
+                                    <span id="cancel_button_{{ event.id }}">
+                                        <span>-</span>
+                                        <a  href="javascript:void(0)" onclick="cancelEvent({{ event.getId() }},'message d\'annulation', '{{ url('cancelEvent') }}')">Annuler</a>
+                                    </span>
                                 {% endif %}
                             {% endif %}
                         {% else %}

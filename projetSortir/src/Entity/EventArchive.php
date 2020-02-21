@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\EventArchiveRepository")
  */
-class Event
+class EventArchive
 {
     /**
      * @ORM\Id()
@@ -84,9 +84,24 @@ class Event
      */
     private $comment;
 
-    public function __construct()
+    public function __construct(Event $event)
     {
-        $this->usersList = new ArrayCollection();
+        if($event){
+            $this->setComment($event->getComment());
+            $this->setState($event->getState());
+            $this->setDate($event->getDate());
+            $this->setName($event->getName());
+            $this->setOrganizer($event->getOrganizer());
+            $this->setLocation($event->getLocation());
+            $this->setSite($event->getSite());
+            $this->setMaxInscriptions($event->getMaxInscriptions());
+            $this->setLimitInscription($event->getLimitInscription());
+            $this->setDuration($event->getDuration());
+            $this->setDescription($event->getDescription());
+        }else{
+            $this->usersList = new ArrayCollection();
+        }
+
     }
 
     public function getId(): ?int

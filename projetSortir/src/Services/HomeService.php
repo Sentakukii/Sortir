@@ -52,7 +52,7 @@ class HomeService
         }
         if($organizer){
 
-           addPrefix($filter,"e.organizer = ".$user->getId()." ");
+           $this->addPrefix($filter,"e.organizer = ".$user->getId()." ");
         }
         if($participate){
             $this->addPrefix($filter,"u = ".$user->getId()." ");
@@ -67,7 +67,7 @@ class HomeService
     }
 
     /**
-     * @param $filter add OR or AND
+     * @param $filter add OR execpt the first time
      */
     private function addPrefix($filter , $string){
         if (!$this->start)
