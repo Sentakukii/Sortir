@@ -1,27 +1,24 @@
 
-
-
 function submitForm(index){
     document.getElementById("event_form_state").selectedIndex = index;
     document.getElementById("form_event").submit();
 }
-function switchModeLocation(){
 
+function switchModeLocation(){
     if(document.getElementsByClassName("select_location")[0].classList.contains("hide")) {
         changeModeLocation(0);
     }else {
         changeModeLocation(1);
     }
 }
-function switchModeCity(){
 
+function switchModeCity(){
     if(document.getElementsByClassName("select_city")[0].classList.contains("hide")) {
         changeModeCity(0);
     }else {
         changeModeCity(1);
     }
 }
-
 
 /**
  *
@@ -53,7 +50,7 @@ function changeModeLocation(mode){
         cross.classList.remove("minus");
 
         //switch to add location
-    }else if (mode == 1){
+    } else if (mode == 1){
         for (var i = 0; i < selects.length ; i++) {
             selects[i].classList.add("hide")
         }

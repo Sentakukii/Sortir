@@ -9,6 +9,7 @@ use App\Entity\State;
 use App\Entity\User;
 use App\Repository\EventRepository;
 use App\Repository\SiteRepository;
+use App\Repository\StateRepository;
 use App\Services\HomeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -47,6 +48,30 @@ class HomeController extends AbstractController
             $siteSelected = $siteRepo->find($siteSelected);
         }
        $events = $this->homeService->buildQuery($request, $eventRepo, $siteRepo , $this->getUser());
+
+        return $this->render('home/index.html.twig', array(
+            'sites' => $siteRepo->findAll(),
+            'events' => $events,
+            'siteSelected' => $siteSelected
+        ));
+    }
+
+    /**
+     * @Route("/publishEvent", name="publishEvent")
+     */
+    public function publishEvent(SiteRepository $siteRepo, EventRepository $eventRepo, StateRepository $stateRepo,Request $request)
+    {
+        $siteSelected = $request->query->get('site');
+        if($siteSelected == null){
+            $siteSelected = $siteRepo->find($this->getUser()->getSite()->getId());
+        }else{
+            $siteSelected = $siteRepo->find($siteSelected);
+        }
+
+        $event = $eventRepo->find($request->get('eventId'));
+        $state = $stateRepo->find('2');
+        $event->setState($state);
+        $events = $this->homeService->buildQuery($request, $eventRepo, $siteRepo , $this->getUser());
 
         return $this->render('home/index.html.twig', array(
             'sites' => $siteRepo->findAll(),

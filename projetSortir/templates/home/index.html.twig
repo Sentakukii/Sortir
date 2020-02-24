@@ -93,31 +93,22 @@
                     </td>
                     <td>{{ event.getOrganizer() }}</td>
                     <td>
-                        {% if event in app.user.eventsOrganized  %}
-                            {% if event.getState() == "Créée" %}
-                                <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
-                                <span>-</span>
-                                <a href="">Publier</a>
-                            {% else %}
-                                <a href="">Afficher</a>
-                                {% if event.getState() == "Ouverte"  %}
-                                    <span id="cancel_button_{{ event.id }}">
-                                        <span>-</span>
-                                        <a  href="javascript:void(0)" onclick="cancelEvent({{ event.getId() }},'message d\'annulation', '{{ url('cancelEvent') }}')">Annuler</a>
-                                    </span>
-                                {% endif %}
-                            {% endif %}
+                        {% if event in app.user.eventsOrganized and event.state == 'Créée'%}
+                            <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
+                            <span>-</span>
+                            <a href="{{ path('publishEvent') }}?eventId={{ event.id }}">Publier</a>
                         {% else %}
-                            <a href="">Afficher</a>
-                            {% if date(event.getLimitInscription()) > date()  and event.getState() == "Ouverte" %}
-                                {% if event in app.user.eventsList %}
-                                    <span>-</span>
-                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)"  onclick="deregisterEvent({{ event.getId() }}, '{{ url('deregister') }}')">Se désister</a>
-                                {% else %}
-                                    {% if event.getUsersList()|length != event.getMaxInscriptions() %}
-                                        <span>-</span>
-                                        <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }}, '{{ url('register') }}')">S'inscrire</a>
-                                    {% endif %}
+                            {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
+                                <a href="javascript:void(0)" onclick="cancelEvent({{ event.getId() }},'message d\'annulation', '{{ url('cancelEvent') }}')">Annuler</a>
+                                <span>-</span>
+                            {% endif %}
+                        {% endif %}
+                        {% if event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
+                            {% if event in app.user.eventsList %}
+                                <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.getId() }})">Se désister</a>
+                            {% else %}
+                                {% if event.getUsersList()|length != event.getMaxInscriptions() %}
+                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }})">S'inscrire</a>
                                 {% endif %}
                             {% endif %}
                         {% endif %}

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\City;
 use App\Entity\Site;
 use App\Form\SiteType;
 use Doctrine\ORM\EntityManagerInterface;

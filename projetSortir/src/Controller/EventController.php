@@ -52,14 +52,12 @@ class EventController extends AbstractController
     public function edit(Request $request , EntityManagerInterface $em) {
         if ($request->query->get('eventId') != null) {
             $event = $em->getRepository(Event::class)->find($request->query->get('eventId'));
-
-        return $this->createOrEdit($request, $event, $em);
+            return $this->createOrEdit($request, $event, $em);
         } else {
             $this->addFlash("error", "erreur sur la selection de la sortie veuillez réessayer ");
             return $this->redirectToRoute('home');
         }
     }
-
 
     private function createOrEdit( Request $request, Event $event, EntityManagerInterface $em)
     {
@@ -72,7 +70,7 @@ class EventController extends AbstractController
                 $type_location = $form->get('type_location')->getData();
                 $type_city = $form->get('type_city')->getData();
                 $state = $form->get('state')->getData();
-                if (  $event->getDate() > new \DateTime()) {
+                if ($event->getDate() > new \DateTime()) {
 
                     if (($type_city == "1" || $type_city == "0") && ($type_location == "1" || $type_location == "0") && ($state->getId() == 1 || $state->getId() == 2)) {
                         if($type_city == "1"){
@@ -139,7 +137,6 @@ class EventController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/event/register", name="register")
      */
@@ -148,11 +145,10 @@ class EventController extends AbstractController
         $response = new JsonResponse();
         $event = $eventRepository->find($request->request->get('eventId'));
 
-
         if($event->getUsersList()->contains($this->security->getUser())) {
             $response->setContent(json_encode(['msg' => 'Vous êtes déjà inscrit', 'nbRegister' => sizeof($event->getUsersList())]));
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-        }else if ($event->getLimitInscription() <  new \DateTime()){
+        }else if ($event->getLimitInscription() < new \DateTime()){
             $response->setContent(json_encode(['msg' => 'La date d\'inscription est dépassé', 'nbRegister' => sizeof($event->getUsersList())]));
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else if (sizeof($event->getUsersList()) == $event->getMaxInscriptions()) {
@@ -167,6 +163,7 @@ class EventController extends AbstractController
 
         return $response;
     }
+
     /**
      * @Route("/event/deregister", name="deregister")
      */
@@ -174,7 +171,6 @@ class EventController extends AbstractController
     {
         $response = new JsonResponse();
         $event = $eventRepository->find($request->request->get('eventId'));
-
 
         if (!$event->getUsersList()->contains($this->security->getUser())) {
             $response->setContent(json_encode(['msg' => 'Vous n\'êtes pas inscrit', 'nbRegister' => sizeof($event->getUsersList())]));
@@ -187,6 +183,7 @@ class EventController extends AbstractController
         }
         return $response;
     }
+
     /**
      * @Route("/event/cancel", name="cancelEvent")
      */
@@ -212,6 +209,4 @@ class EventController extends AbstractController
 
         return $response;
     }
-
-
 }
