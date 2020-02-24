@@ -61,7 +61,6 @@ class Event
      */
     private $location;
 
-
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="eventsList")
      */
@@ -190,8 +189,6 @@ class Event
 
         return $this;
     }
-
-
 
     /**
      * @return Collection|User[]

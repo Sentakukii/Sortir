@@ -46,6 +46,7 @@ function deregisterEvent(eventId) {
     });
 }
 
+// don't update the DOM
 function cancelEvent(eventId ,comment, url) {
     $.ajax({
         url: url,

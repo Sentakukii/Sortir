@@ -41,13 +41,14 @@ class HomeController extends AbstractController
      */
     public function index(SiteRepository $siteRepo, EventRepository $eventRepo,  Request $request)
     {
+
         $siteSelected = $request->query->get('site');
         if($siteSelected == null){
             $siteSelected = $siteRepo->find($this->getUser()->getSite()->getId());
-        }else{
+        } else {
             $siteSelected = $siteRepo->find($siteSelected);
         }
-       $events = $this->homeService->buildQuery($request, $eventRepo, $siteRepo , $this->getUser());
+        $events = $this->homeService->buildQuery($request, $eventRepo, $siteRepo , $this->getUser());
 
         return $this->render('home/index.html.twig', array(
             'sites' => $siteRepo->findAll(),

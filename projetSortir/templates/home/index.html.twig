@@ -27,12 +27,12 @@
                 </div>
                 <div class="row search_form_row">
                     <label class="col-md-7" for="search_text">Le nom de la sortie contient : </label>
-                    <input  class="col-md-5" type="text" id="search_text" name="search_text" placeholder="rechercher" value="{{app.request.query.get('search_text')}}"/>
+                    <input class="col-md-5" type="text" id="search_text" name="search_text" placeholder="rechercher" value="{{app.request.query.get('search_text')}}"/>
                 </div>
                 <div class="row search_form_row">
                     <label class="col-md-2" for="date_start">entre : </label>
                     <!-- WOOW holy shit! it's Amaziiing, it works-->
-                    <input  class="col-md-2.5" type="date" id="date_start" name="date_start" value="{{app.request.query.get('date_start')}}"/>
+                    <input class="col-md-2.5" type="date" id="date_start" name="date_start" value="{{app.request.query.get('date_start')}}"/>
                     <div class="col-md-1 text-center image_calendar">&nbsp;</div>
                     <span class="col-md-1 text-center"> et </span>
                     <input  class="col-md-2.5" type="date" id="date_end" name="date_end" value="{{app.request.query.get('date_end')}}"/>
@@ -102,14 +102,15 @@
                         {% else %}
                             {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
                                 <a href="javascript:void(0)" onclick="cancelEvent({{ event.getId() }},'message d\'annulation', '{{ url('cancelEvent') }}')">Annuler</a>
-                                <span>-</span>
                             {% endif %}
                         {% endif %}
                         {% if event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
                             {% if event in app.user.eventsList %}
+                                <span>-</span>
                                 <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.getId() }})">Se désister</a>
                             {% else %}
                                 {% if event.getUsersList()|length != event.getMaxInscriptions() %}
+                                    <span>-</span>
                                     <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }})">S'inscrire</a>
                                 {% endif %}
                             {% endif %}

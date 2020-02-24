@@ -19,7 +19,6 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-
     /**
      * @param $filter  where condition
      * @return mixed
@@ -33,6 +32,8 @@ class EventRepository extends ServiceEntityRepository
             FROM App\Entity\Event e 
             LEFT JOIN e.usersList u
             WHERE ".$filter);
+
+        dump($filter);
 
         $result = $query->getResult();
         return $result;

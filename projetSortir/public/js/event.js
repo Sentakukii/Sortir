@@ -7,7 +7,7 @@ function submitForm(index){
 function switchModeLocation(){
     if(document.getElementsByClassName("select_location")[0].classList.contains("hide")) {
         changeModeLocation(0);
-    }else {
+    } else {
         changeModeLocation(1);
     }
 }
@@ -15,7 +15,7 @@ function switchModeLocation(){
 function switchModeCity(){
     if(document.getElementsByClassName("select_city")[0].classList.contains("hide")) {
         changeModeCity(0);
-    }else {
+    } else {
         changeModeCity(1);
     }
 }
@@ -106,6 +106,7 @@ function changeModeCity(mode) {
         cross.classList.remove("plus");
     }
 }
+
 function getLocations(select , url) {
     $.ajax({
         url : url,

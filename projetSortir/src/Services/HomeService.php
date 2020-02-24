@@ -51,7 +51,6 @@ class HomeService
             $filter .="e.date >= CURRENT_TIMESTAMP()  ";
         }
         if($organizer){
-
            $this->addPrefix($filter,"e.organizer = ".$user->getId()." ");
         }
         if($participate){
