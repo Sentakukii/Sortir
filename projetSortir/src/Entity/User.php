@@ -63,8 +63,6 @@ class User implements UserInterface
      */
     private $site;
 
-
-
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Event", inversedBy="usersList")
      */

@@ -62,4 +62,17 @@ class ProfilController extends AbstractController
             'profilForm' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/displayProfil", name="displayProfil")
+     */
+    public function displayProfil(Request $request, EntityManagerInterface $em)
+    {
+        $user = $em->getRepository(User::class)->find($request->get('organizerId'));
+
+        return $this->render('profil/displayProfil.html.twig', [
+            'controller_name' => 'ProfilController',
+            'user' => $user
+        ]);
+    }
 }

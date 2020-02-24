@@ -91,7 +91,9 @@
                             <div id="cross_menu_{{ event.getId() }}" class="cross hide"></div>
                         {% endif %}
                     </td>
-                    <td>{{ event.getOrganizer() }}</td>
+                    <td>
+                        <a href="{{ path('displayProfil') }}?organizerId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
+                    </td>
                     <td>
                         {% if event in app.user.eventsOrganized and event.state == 'Créée'%}
                             <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
@@ -119,7 +121,6 @@
         </table>
     </div>
     <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
-
 {% endblock %}
 
 {% block javascripts %} <script src=" {{ asset('js/home.js') }} " ></script> {% endblock %}
