@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SiteController!{% endblock %}
+
+{% block body %}
+
+    {{ form_start(siteForm) }}
+
+    {{ form_rest(siteForm) }}
+
+    <input class="btn btn-primary" type="submit" value="Enregistrer"/>
+    <a href="{{ path('home') }}" class="btn btn-primary" role="button">Annuler</a>
+    {{ form_end(siteForm) }}
+
+{% endblock %}

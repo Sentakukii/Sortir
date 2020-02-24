@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Entity\Site;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -22,7 +23,6 @@ class SecurityController extends AbstractController
 //        if ($this->getUser()) {
 //            return $this->redirectToRoute('home');
 //        }
-
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user

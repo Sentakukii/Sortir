@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\City;
 use App\Repository\LocationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +40,7 @@ class AjaxController extends AbstractController
         $city = $request->request->get('cityId');
 
         if($city) {
-            $locations= $locationRepository->findBy(['city' => $city]);
+            $locations = $locationRepository->findBy(['city' => $city]);
         }else {
             $locations = $locationRepository->findAll();
         }

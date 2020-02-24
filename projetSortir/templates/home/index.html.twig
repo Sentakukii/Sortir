@@ -67,7 +67,7 @@
             <thead>
             <tr>
                 <th scope="col">Nom de la sortie</th>
-                <th scope="col">Date de la sortie
+                <th scope="col">Date de la sortie</th>
                 <th scope="col">Clôture</th>
                 <th scope="col">Inscrits/places</th>
                 <th scope="col">Etat</th>
@@ -94,7 +94,7 @@
                     <td>{{ event.getOrganizer() }}</td>
                     <td>
                         {% if event in app.user.eventsOrganized  %}
-                            {% if event.getState() == "Créée"  %}
+                            {% if event.getState() == "Créée" %}
                                 <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
                                 <span>-</span>
                                 <a href="">Publier</a>

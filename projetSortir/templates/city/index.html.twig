@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CityController!{% endblock %}
+
+{% block body %}
+    <div class="text-center">
+        <h1>Gérer les villes</h1>
+    </div>
+    <div class="row">
+        <h3>Filtrer les villes</h3>
+    </div>
+    <div class="row">
+        <h4>Le nom contient : </h4>
+        <input type="text">
+        <button type="button" class="btn btn-primary">Rechercher</button>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Ville</th>
+                <th scope="col">Code Postal</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for city in cities %}
+                <tr id="row_event_{{ city.id }}">
+                    <td>{{ city.getName() }}</td>
+                    <td>{{ city.getPostalCode() }}</td>
+                    <td>
+                        <a href="{{ path('editCity', { 'cityId': city.id }) }}">Modifier</a> -
+                        <a href="{{ path('deleteCity', { 'cityId': city.id }) }}">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    <a href="{{ path('newCity') }}">ajouter</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

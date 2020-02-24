@@ -39,10 +39,6 @@ class EventController extends AbstractController
         ]);
     }
 
-
-
-
-
     /**
      * @Route("/event/create", name="eventCreate")
      */
