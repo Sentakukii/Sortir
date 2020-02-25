@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Entity\Site;
+use App\Entity\Token;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,5 +38,29 @@ class SecurityController extends AbstractController
     public function logout()
     {
         return $this->render('security/login.html.twig');
+    }
+
+    /**
+     * @Route("/passwordforbidden" , name="passwordForbidden")
+     */
+    public function passwordForbidden( EntityManagerInterface $em){
+        $token = new Token();
+        $token->setName($this->random(25));
+        $token->setType("password");
+        $token->setExpirationDate(new \DateTime())->modify('+1 day');
+        $em->persist($token);
+        $em->flush();
+
+    }
+
+
+    private function random($var){
+        $string = "";
+        $chaine = "a0b1c2d3e4f5g6h7i8j9klmnpqrstuvwxy123456789";
+        srand((double)microtime()*1000000);
+        for($i=0; $i<$var; $i++){
+            $string .= $chaine[rand()%strlen($chaine)];
+        }
+        return $string;
     }
 }

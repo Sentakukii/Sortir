@@ -54,4 +54,67 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/importCSV", name="importCSV")
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function importCSV(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em ): Response
+    {
+        try {
+            dump($this->container->getParameter(('public')));
+            die();
+            $filename = 'C:\Users\fgobron2018\Documents\projet\Sortir\projetSortir\public\csv\users.csv';
+
+            $handle = fopen($filename, 'r');
+
+            $contents = fread($handle, filesize($filename));
+            fclose($handle);
+            $contents = trim($contents);
+            $array = explode(PHP_EOL, $contents);
+
+
+            for ($i = 1; $i < sizeof($array); $i++) {
+                $row = $array[$i];
+                $cell = explode(",", $row);
+                $user = new User();
+                $user->setEmail($cell[0]);
+                $user->setName($cell[1]);
+                $user->setFirstName($cell[2]);
+                $user->setPhone($cell[3]);
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $cell[4]
+                    )
+                );
+
+                $site = $em->getRepository(Site::class)->findBy(['name' => $cell[5]]);
+
+
+                if (!$site) {
+                    $site = new  Site();
+                    $site->setName($cell[5]);
+                    $em->persist($site);
+                }else{
+                    $site= $site[0];
+                }
+
+                $user->setSite($site);
+
+
+                if (!$em->getRepository(User::class)->findBy(["email" => $cell[0]]))
+                    $em->persist($user);
+                $em->flush();
+            }
+
+            $this->addFlash("success", "import csv réussit");
+
+        }catch (\Exception $e){
+            $this->addFlash("error", "erreur dans l'import du csv");
+            $this->addFlash("error", $e->getMessage());
+
+    }
+        return $this->redirectToRoute('home');
+    }
 }

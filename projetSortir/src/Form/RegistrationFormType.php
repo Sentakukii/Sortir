@@ -40,6 +40,7 @@ class RegistrationFormType extends AbstractType
                         'max' => 4096,
                     ]),
                 ],
+                'required' => false,
             ])
             ->add('name', null, [
                 'label' => 'Nom : ',
