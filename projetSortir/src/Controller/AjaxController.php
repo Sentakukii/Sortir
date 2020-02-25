@@ -52,7 +52,7 @@ class AjaxController extends AbstractController
             array_push($tabName, $value->getName());
         }
 
-        $tab = ['Mathilde' => 27, 'Pierre' => 29, 'Amandine' => 21];
+        //$tab = ['Mathilde' => 27, 'Pierre' => 29, 'Amandine' => 21];
 
         $response->setContent(json_encode(['msg' => 'liste des lieux', 'locationsId' => $tabId , 'locationsName' => $tabName]));
         return $response;

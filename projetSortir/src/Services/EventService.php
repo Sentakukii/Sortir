@@ -23,31 +23,27 @@ class EventService
             foreach ($events as $event) {
                 $date = $event->getDate();
                 $now = new \DateTime();
-                $limitDate = $now;
+                $limitDate =   new $now;
+
                 $limitDate->modify('-1 month');
                 if ($date instanceof \DateTime && $limitDate instanceof \DateTime) {
 
-                    return $date->getTimestamp() - $limitDate->getTimestamp();
                     if ($date < $limitDate) {
-                        return "coucou";
-                        $event->setState($stateRepository->findBy(['denomination' => 'Cloturée']));
+                        $event->setState($stateRepository->findBy(['denomination' => 'Cloturée'])[0]);
                         $eventArchive = new EventArchive($event);
                         $em->persist($eventArchive);
                         $em->remove($event);
-                        $string .= $event . " archive";
+                        $string .= $event . " archive ";
 
                     } elseif ($date == $now) { //don't working because it's DateTime
-                        return "coucou 2 ";
-                        $event->setState($stateRepository->findBy(['denomination' => 'Activité en cours']));
+                        $event->setState($stateRepository->findBy(['denomination' => 'Activité en cours'])[0]);
                         $em->persist($event);
-                        $string .= $event . " active";
+                        $string .= $event . " active ";
 
                     } elseif ($date < $now) {
-                        return "coucou 3 ";
-                        $event->setState($stateRepository->findBy(['denomination' => 'Passée']));
+                        $event->setState($stateRepository->findBy(['denomination' => 'Passée'])[0]);
                         $em->persist($event);
-                        $string .= $event . " past";
-
+                        $string .= $event . " past ";
                     }
                 }
             }

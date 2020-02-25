@@ -253,4 +253,9 @@ class Event
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return "event :  ".$this->name;
+    }
 }
