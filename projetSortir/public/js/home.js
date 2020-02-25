@@ -1,7 +1,8 @@
+const serverPath = 'http://localhost:8000/';
 
 function registerEvent(eventId) {
     $.ajax({
-        url : 'http://localhost:8000/event/register',
+        url : serverPath+'event/register',
         type : 'POST',
         data: 'eventId='+eventId,
         success : function(json, status){
@@ -25,7 +26,7 @@ function registerEvent(eventId) {
 
 function deregisterEvent(eventId) {
     $.ajax({
-        url: 'http://localhost:8000/event/deregister',
+        url: serverPath+'event/deregister',
         type: 'POST',
         data: 'eventId=' + eventId,
         success: function (json, status) {
@@ -46,7 +47,6 @@ function deregisterEvent(eventId) {
     });
 }
 
-// don't update the DOM
 function cancelEvent(eventId ,comment, url) {
     $.ajax({
         url: url,

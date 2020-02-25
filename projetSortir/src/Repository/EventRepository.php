@@ -33,8 +33,6 @@ class EventRepository extends ServiceEntityRepository
             LEFT JOIN e.usersList u
             WHERE ".$filter);
 
-        dump($filter);
-
         $result = $query->getResult();
         return $result;
     }

@@ -6,6 +6,7 @@ use App\Entity\City;
 use App\Entity\Event;
 use App\Entity\Location;
 use App\Entity\State;
+use App\Form\CancelEventType;
 use App\Form\EventFormType;
 use App\Form\RegistrationFormType;
 use App\Repository\EventRepository;
@@ -187,7 +188,7 @@ class EventController extends AbstractController
     /**
      * @Route("/event/cancel", name="cancelEvent")
      */
-    public function cancelEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
+    /*public function cancelEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
     {
         $response = new JsonResponse();
         $event = $eventRepository->find($request->request->get('eventId'));
@@ -208,5 +209,37 @@ class EventController extends AbstractController
         }
 
         return $response;
+    }*/
+
+    /**
+     * @Route("/cancelEvent", name="cancelEvent")
+     */
+    public function cancelEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
+    {
+        $event = $eventRepository->find($request->get('eventId'));
+        $comment = null;
+        $form = $this->createForm(CancelEventType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($event->getDate() < new \DateTime()) {
+                $this->addFlash("error", "La sortie a déja été éffectué"); // info warning error
+            } elseif (!$event->getState(2) && !$event->getState(2)) {
+                $this->addFlash("error", "La sortie doit etre dans l'état \"créée\" ou \"ouvert\" pour etre annulée");
+            } else {
+                $this->addFlash("success", "La sortie a été annulée");
+                $comment = $form["comment"]->getData();
+                $event->setState($em->getRepository(State::class)->find(6));
+                $event->setComment($comment);
+                $em->persist($event);
+                $em->flush();
+            }
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('event/cancel.html.twig', array(
+            'cancelEventForm' => $form->createView(),
+        ));
     }
 }

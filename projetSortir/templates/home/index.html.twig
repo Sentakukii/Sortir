@@ -101,7 +101,7 @@
                             <a href="{{ path('publishEvent') }}?eventId={{ event.id }}">Publier</a>
                         {% else %}
                             {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
-                                <a href="javascript:void(0)" onclick="cancelEvent({{ event.getId() }},'message d\'annulation', '{{ url('cancelEvent') }}')">Annuler</a>
+                                <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
                             {% endif %}
                         {% endif %}
                         {% if event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
