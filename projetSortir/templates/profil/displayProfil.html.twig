@@ -3,24 +3,22 @@
 {% block title %}Hello ProfilController!{% endblock %}
 
 {% block body %}
-    <div>
-        <img src="{{ asset('/img/default_profil.jpg') }}" class="img-fluid image_profile">
-    </div>
-
-    <div class="container">
         <div class="row justify-content-center">
             <h1>Mon profil</h1>
         </div>
 
         <div class="row justify-content-center">
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-12">
+                <img src="{{ asset('/img/default_profil.jpg') }}" class="img-fluid">
+            </div>
+            <div class="col-md-3 col-sm-6">
                 <h4>Prénom</h4>
                 <h4>Nom</h4>
                 <h4>Téléphone</h4>
                 <h4>Email</h4>
                 <h4>Ville de rattachement</h4>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-sm-6">
                 <h4>{{ user.firstName }}</h4>
                 <h4>{{ user.name }}</h4>
                 <h4>
@@ -34,7 +32,5 @@
                 <h4>{{ user.site }}</h4>
             </div>
         </div>
-    </div>
-
 
 {% endblock %}
