@@ -111,7 +111,7 @@
                             {% else %}
                                 {% if event.getUsersList()|length != event.getMaxInscriptions() %}
                                     <span>-</span>
-                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }})">S'inscrire</a>
+                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }}, )">S'inscrire</a>
                                 {% endif %}
                             {% endif %}
                         {% endif %}
@@ -124,5 +124,11 @@
     <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
 {% endblock %}
 
-{% block javascripts %} <script src=" {{ asset('js/home.js') }} " ></script> {% endblock %}
+{% block javascripts %}
+    <script>
+        var urlRegister = '{{ url('register') }}';
+        var urlDeregister ='{{ url('deregister') }}';
+    </script>
+    <script src=" {{ asset('js/home.js') }} " ></script>
+{% endblock %}
 

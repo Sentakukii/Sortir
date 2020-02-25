@@ -2,7 +2,7 @@ const serverPath = 'http://localhost:8000/';
 
 function registerEvent(eventId) {
     $.ajax({
-        url : serverPath+'event/register',
+        url : urlRegister,
         type : 'POST',
         data: 'eventId='+eventId,
         success : function(json, status){
@@ -26,7 +26,7 @@ function registerEvent(eventId) {
 
 function deregisterEvent(eventId) {
     $.ajax({
-        url: serverPath+'event/deregister',
+        url: urlDeregister,
         type: 'POST',
         data: 'eventId=' + eventId,
         success: function (json, status) {
