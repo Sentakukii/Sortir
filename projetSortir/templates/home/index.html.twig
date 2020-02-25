@@ -94,17 +94,20 @@
                     <td>
                         <a href="{{ path('displayProfil') }}?organizerId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
                     </td>
-                    <td>
-                        {% if event in app.user.eventsOrganized and event.state == 'Créée'%}
-                            <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
-                            <span>-</span>
-                            <a href="{{ path('publishEvent') }}?eventId={{ event.id }}">Publier</a>
-                        {% else %}
-                            {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
-                                <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
+                    <td>  {% if event in app.user.eventsOrganized %}
+                            {% if event.state == 'Créée'%}
+                                <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
+                                <span>-</span>
+                                <a href="{{ path('publishEvent') }}?eventId={{ event.id }}">Publier</a>
+                            {% else %}
+                                {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
+                                    <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
+                                    <span>-</span>
+                                    <a id="display_event_button_{{ event.id }}" href="javascript:void(0)" >Afficher</a>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                        {% if event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
+                        {% elseif event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
+                            <a id="display_event_button_{{ event.id }}" href="javascript:void(0)" >Afficher</a>
                             {% if event in app.user.eventsList %}
                                 <span>-</span>
                                 <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.getId() }})">Se désister</a>
@@ -114,6 +117,7 @@
                                     <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }}, )">S'inscrire</a>
                                 {% endif %}
                             {% endif %}
+
                         {% endif %}
                     </td>
                 </tr>

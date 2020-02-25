@@ -50,6 +50,8 @@ class HomeController extends AbstractController
         }
         $events = $this->homeService->buildQuery($request, $eventRepo, $siteRepo , $this->getUser());
 
+
+
         return $this->render('home/index.html.twig', array(
             'sites' => $siteRepo->findAll(),
             'events' => $events,

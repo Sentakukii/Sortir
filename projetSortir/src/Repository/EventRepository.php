@@ -32,7 +32,6 @@ class EventRepository extends ServiceEntityRepository
             FROM App\Entity\Event e 
             LEFT JOIN e.usersList u
             WHERE ".$filter);
-
         $result = $query->getResult();
         return $result;
     }

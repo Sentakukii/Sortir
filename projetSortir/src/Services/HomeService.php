@@ -15,7 +15,7 @@ class HomeService
     public function __construct()
     {
 
-        $this->start = false;
+        $this->start = true;
     }
 
 
@@ -27,6 +27,7 @@ class HomeService
         $dateStart = $request->query->get('date_start');
         $dateEnd = $request->query->get('date_end');
         $organizer = $request->query->get('checkbox_organizer');
+
         $participate = $request->query->get('checkbox_participate');
         $noParticipate = $request->query->get('checkbox_no_participate');
         $past = $request->query->get('checkbox_past');
@@ -44,22 +45,34 @@ class HomeService
         if(($dateStart != null || $dateStart != "") && ($dateEnd != null || $dateEnd != "")){
             $filter .= "AND e.date >= '".$dateStart."' AND e.date <= '".$dateEnd."' ";
         }
-        $filter .= "AND ( " ;
+
         if($past){
-            $filter .="e.date < CURRENT_TIMESTAMP()  ";
+            $filter .="AND e.date < CURRENT_TIMESTAMP()  ";
         }else{
-            $filter .="e.date >= CURRENT_TIMESTAMP()  ";
+            $filter .="AND e.date >= CURRENT_TIMESTAMP()  ";
         }
-        if($organizer){
-           $this->addPrefix($filter,"e.organizer = ".$user->getId()." ");
+        if($organizer || $participate || $noParticipate) {
+            $filter .= "AND (";
+
+            if ($organizer) {
+                $filter .= "e.organizer = " . $user->getId() . " ";
+                if ($participate || $noParticipate) {
+                    $filter .= " OR ( ";
+                }
+            }
+            if ($participate || $noParticipate) {
+                if ($participate) {
+                    $filter = $this->addPrefix($filter, "u = " . $user->getId() . " ");
+                }
+                if ($noParticipate) {
+                    $filter = $this->addPrefix($filter, "(u != " . $user->getId() . " OR u IS NULL)");
+                }
+                if ($organizer) {
+                    $filter .= " ) ";
+                }
+            }
+            $filter .= ") ";
         }
-        if($participate){
-            $this->addPrefix($filter,"u = ".$user->getId()." ");
-        }
-        if($noParticipate){
-            $this->addPrefix($filter,"(u != ".$user->getId()." OR u IS NULL)");
-        }
-        $filter .= ") " ;
 
         return $eventRepo->findWithFilter($filter);
 
@@ -73,6 +86,7 @@ class HomeService
             $filter .= "OR ".$string;
         else
             $filter .= $string;
+        $this->start = false;
         return $filter;
 
     }
