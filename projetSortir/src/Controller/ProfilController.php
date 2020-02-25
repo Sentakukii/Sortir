@@ -8,6 +8,7 @@ use App\Form\ProfilType;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -45,11 +46,29 @@ class ProfilController extends AbstractController
                 )
             );
 
-           // $entityManager = $this->getDoctrine()->getManager();
+            $imagePath = $form->get('imagePath')->getData();
+
+            if ($imagePath) {
+                $originalFilename = pathinfo($imagePath->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = transliterator_transliterate('Any-Latin; Latin-ASCII; [^A-Za-z0-9_] remove; Lower()', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imagePath->guessExtension();
+
+                try {
+                    $imagePath->move(
+                        $this->getParameter('upload_directory'), // $this->getParameter('kernel.project_dir').
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+
+                }
+
+                /** @var User $user */
+                $user->setImagePath($newFilename);
+            }
+
             $em->persist($user);
             $em->flush();
-
-            // do anything else you need here, like send an email
 
             $this->addFlash("success", "Profil modifié"); // info warning error
 
@@ -60,6 +79,7 @@ class ProfilController extends AbstractController
             'controller_name' => 'ProfilController',
             'sites' => $siteRepository->findAll(),
             'profilForm' => $form->createView(),
+            'user' => $user,
         ]);
     }
 

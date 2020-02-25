@@ -73,6 +73,11 @@ class User implements UserInterface
      */
     private $eventsOrganized;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imagePath;
+
     public function __construct()
     {
         $this->eventsList = new ArrayCollection();
@@ -279,5 +284,17 @@ class User implements UserInterface
     }
     public function __toString(): string{
         return $this->getName()." ".$this->getFirstName();
+    }
+
+    public function getImagePath(): ?string
+    {
+        return $this->imagePath;
+    }
+
+    public function setImagePath(?string $imagePath): self
+    {
+        $this->imagePath = $imagePath;
+
+        return $this;
     }
 }
