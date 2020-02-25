@@ -8,9 +8,11 @@
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-md-4 col-sm-12">
-            <img src="{{ asset('/img/default_profil.jpg') }}" class="img-fluid image_profile">
-        </div>
+        {% if user.imagePath != null %}
+            <img src="{{ asset('/img/' ~ user.imagePath) }}" class="img-fluid">
+        {% else %}
+            <img src="{{ asset('/img/default_profil.jpg') }}" class="img-fluid">
+        {% endif %}
         <div class="col-md-5 col-sm-12">
             {{ form_start(profilForm) }}
 

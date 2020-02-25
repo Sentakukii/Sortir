@@ -9,7 +9,11 @@
 
         <div class="row justify-content-center">
             <div class="col-md-3 col-sm-12">
-                <img src="{{ asset('/img/default_profil.jpg') }}" class="img-fluid">
+                {% if user.imagePath != null %}
+                    <img src="{{ asset('/img/' ~ user.imagePath) }}" class="img-fluid">
+                {% else %}
+                    <img src="{{ asset('/img/default_profil.jpg') }}" class="img-fluid">
+                {% endif %}
             </div>
             <div class="col-md-3 col-sm-6">
                 <h4>Prénom</h4>
