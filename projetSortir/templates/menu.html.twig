@@ -6,6 +6,9 @@
             <a href="{{ path('site') }}" class="link col-md-2 menu_link">Sites</a>
             <a href="{{ path('home') }}" class="link col-md-2 menu_link">Accueil</a>
             <a href="{{ path('profil') }}" class="link col-md-2 menu_link">Mon Profil</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_register') }}" class="link col-md-2 menu_link">Créer un utilisateur</a>
+            {% endif %}
             <a href="{{ path('app_logout') }}" class="link col-md-2 menu_link">Se déconnecter</a>
         </div>
     </div>
