@@ -12,7 +12,7 @@ class CancelEventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('comment')
+            ->add('comment',null,array('label' => 'Motif d\'annulation :'))
             ->add('Enregistrer', SubmitType::class)
         ;
     }

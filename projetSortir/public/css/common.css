@@ -99,12 +99,12 @@ table{
     overflow: auto;
 }
 
-.image_profile{
+/*.image_profile{
     position:absolute;
     height: 15em;
     top:10em;
     left:10%;
-}
+}*/
 
 .hide{
     display: none;
