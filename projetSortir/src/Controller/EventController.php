@@ -33,24 +33,32 @@ class EventController extends AbstractController
     /**
      * @Route("/event", name="event")
      */
-    public function index()
+    public function index(Request $request, EntityManagerInterface $em)
     {
+        if ($request->query->get('eventId') != null) {
+            $event = $em->getRepository(Event::class)->find($request->query->get('eventId'));
+        } else {
+            $this->addFlash("error", "erreur sur la selection de la sortie veuillez réessayer ");
+            return $this->redirectToRoute('home');
+        }
+
         return $this->render('event/index.html.twig', [
             'controller_name' => 'EventController',
+            'event' => $event,
         ]);
     }
 
     /**
      * @Route("/event/create", name="eventCreate")
      */
-    public function create(Request $request , EntityManagerInterface $em) {
+    public function create(Request $request, EntityManagerInterface $em) {
         return $this->createOrEdit($request, new Event() ,  $em);
     }
 
     /**
      * @Route("/event/edit", name="eventEdit")
      */
-    public function edit(Request $request , EntityManagerInterface $em) {
+    public function edit(Request $request, EntityManagerInterface $em) {
         if ($request->query->get('eventId') != null) {
             $event = $em->getRepository(Event::class)->find($request->query->get('eventId'));
             return $this->createOrEdit($request, $event, $em);
@@ -184,32 +192,6 @@ class EventController extends AbstractController
         }
         return $response;
     }
-
-    /**
-     * @Route("/event/cancel", name="cancelEvent")
-     */
-    /*public function cancelEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
-    {
-        $response = new JsonResponse();
-        $event = $eventRepository->find($request->request->get('eventId'));
-        $comment = $eventRepository->find($request->request->get('comment'));
-
-        if($event->getDate() < new \DateTime()){
-            $response->setContent(json_encode(['msg' => 'La sortie a déja été éffectué']));
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-        }elseif (!$event->getState(2) && !$event->getState(2)){
-            $response->setContent(json_encode(['msg' => 'La sortie doit etre dans l\'état "créée" ou "ouvert" pour etre annulée' ]));
-            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
-        }else{
-            $event->setState($em->getRepository(State::class)->find(6));
-            $event->setComment($comment);
-            $em->persist($event);
-            $em->flush();
-            $response->setContent(json_encode(['msg' => "Annulation réussit" ]));
-        }
-
-        return $response;
-    }*/
 
     /**
      * @Route("/cancelEvent", name="cancelEvent")

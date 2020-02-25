@@ -103,11 +103,11 @@
                                 {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
                                     <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
                                     <span>-</span>
-                                    <a id="display_event_button_{{ event.id }}" href="javascript:void(0)" >Afficher</a>
+                                    <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
                                 {% endif %}
                             {% endif %}
                         {% elseif event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
-                            <a id="display_event_button_{{ event.id }}" href="javascript:void(0)" >Afficher</a>
+                            <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
                             {% if event in app.user.eventsList %}
                                 <span>-</span>
                                 <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.getId() }})">Se désister</a>
