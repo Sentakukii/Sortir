@@ -60,6 +60,7 @@ function cancelEvent(eventId ,comment, url) {
         success: function (json, status) {
             (new App.Flash()).success(json.msg);
            document.getElementById("cancel_button_"+eventId).classList.add("hide");
+            document.querySelector("input[type='file']");
         },
         error: function (response) {
             var json= response.responseJSON;

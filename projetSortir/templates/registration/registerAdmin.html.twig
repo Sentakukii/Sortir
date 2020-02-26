@@ -6,12 +6,17 @@
 {% block body %}
 
 
-    <h1>Register</h1>
     {% if is_granted('ROLE_ADMIN') %}
-    {{ form(registrationForm) }}
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-sm-12">
+                <h1>Register</h1>
+                {{ form(registrationForm) }}
+                {{ form(csvForm) }}
+            <button class="btn btn-primary" onclick="window.location='{{ path('generateToken') }}';">Générer un token</button>
+            </div>
+        </div>
 
-    {{ form(csvForm) }}
-        <button class="btn btn-primary" onclick="window.location='{{ path('generateToken') }}';">Générer un token</button>
+
     {% endif %}
 
 {% endblock %}
