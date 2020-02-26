@@ -92,7 +92,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('displayProfil') }}?organizerId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
+                        <a href="{{ path('displayProfil') }}?userId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
                     </td>
                     <td>{% if event in app.user.eventsOrganized %}
                             {% if event.state == 'Créée'%}
@@ -132,6 +132,7 @@
         </table>
     </div>
     <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
+    <button class="btn btn-primary" onclick="window.location='{{ path('user') }}';">Tous les utilisateurs</button>
 {% endblock %}
 
 {% block javascripts %}
