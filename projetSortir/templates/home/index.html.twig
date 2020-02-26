@@ -92,9 +92,9 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('displayProfil') }}?organizerId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
+                        <a href="{{ path('displayProfil') }}?userId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
                     </td>
-                    <td>  {% if event in app.user.eventsOrganized %}
+                    <td>{% if event in app.user.eventsOrganized %}
                             {% if event.state == 'Créée'%}
                                 <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
                                 <span>-</span>
@@ -107,6 +107,12 @@
                                 {% endif %}
                             {% endif %}
                         {% elseif event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
+                                    <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
+                                    <span>-</span>
+                                {% endif %}
+                            {% endif %}
                             <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
                             {% if event in app.user.eventsList %}
                                 <span>-</span>
@@ -126,6 +132,7 @@
         </table>
     </div>
     <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
+    <button class="btn btn-primary" onclick="window.location='{{ path('user') }}';">Tous les utilisateurs</button>
 {% endblock %}
 
 {% block javascripts %}

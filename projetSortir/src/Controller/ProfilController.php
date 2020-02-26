@@ -88,7 +88,7 @@ class ProfilController extends AbstractController
      */
     public function displayProfil(Request $request, EntityManagerInterface $em)
     {
-        $user = $em->getRepository(User::class)->find($request->get('organizerId'));
+        $user = $em->getRepository(User::class)->find($request->get('userId'));
 
         return $this->render('profil/displayProfil.html.twig', [
             'controller_name' => 'ProfilController',
