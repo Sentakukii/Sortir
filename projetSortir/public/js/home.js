@@ -1,5 +1,3 @@
-const serverPath = 'http://localhost:8000/';
-
 function registerEvent(eventId) {
     $.ajax({
         url : urlRegister,
@@ -7,7 +5,6 @@ function registerEvent(eventId) {
         data: 'eventId='+eventId,
         success : function(json, status){
             (new App.Flash()).success(json.msg);
-            console.log("json: "+JSON.stringify(json,null,2));
             document.getElementById("nbRegister_"+eventId).textContent = json.nbRegister;
             document.getElementById("cross_menu_"+eventId).classList.remove('hide');
             var registerButton = document.getElementById("register_button_"+eventId);
@@ -18,7 +15,6 @@ function registerEvent(eventId) {
         },
         error : function(response, status){
             var json= response.responseJSON;
-            console.log("json: "+JSON.stringify(json,null,2));
             (new App.Flash()).danger(json.msg);
             document.getElementById("nbRegister_"+eventId).textContent = json.nbRegister;
         }
@@ -32,7 +28,6 @@ function deregisterEvent(eventId) {
             type: 'POST',
             data: 'eventId=' + eventId,
             success: function (json, status) {
-                console.log("json: "+JSON.stringify(json,null,2));
                 (new App.Flash()).success(json.msg);
                 document.getElementById("nbRegister_" + eventId).innerHTML = json.nbRegister;
                 document.getElementById("cross_menu_" + eventId).classList.add('hide');
@@ -44,7 +39,6 @@ function deregisterEvent(eventId) {
             },
             error: function (response) {
                 var json= response.responseJSON;
-                console.log("json: "+JSON.stringify(json,null,2));
                 (new App.Flash()).danger(json.msg);
                 document.getElementById("nbRegister_" + eventId).textContent = json.nbRegister;
             }
