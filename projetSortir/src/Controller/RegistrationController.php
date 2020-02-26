@@ -5,6 +5,10 @@ namespace App\Controller;
 use App\Entity\Site;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Form\ResetPasswordUserType;
+use App\Form\SendResetPasswordUserType;
+use App\Repository\TokenRepository;
+use App\Repository\UserRepository;
 use App\Security\LoginFormAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -112,9 +116,53 @@ class RegistrationController extends AbstractController
 
         }catch (\Exception $e){
             $this->addFlash("error", "erreur dans l'import du csv");
-            $this->addFlash("error", $e->getMessage());
-
     }
         return $this->redirectToRoute('home');
+    }
+
+    /**
+     * @Route("/resetpassword", name="resetPassword")
+     */
+    public function resetPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em, TokenRepository $tokenRepository, UserRepository $userRepository ): Response
+    {
+        $key = $request->query->get("key");
+        $idUser = $request->query->get("idUser");
+        $user = $userRepository->find($idUser);
+        $form = $this->createForm(ResetPasswordUserType::class, $user);
+        $form->handleRequest($request);
+        if ($key) {
+            $token = $tokenRepository->findOneBy(["name" => $key, "user" => $user , "type" => $this->getParameter('type_password')]);
+            if ($form->isSubmitted() && $form->isValid()) {
+                try {
+                    // encode the plain password
+                    $user->setPassword(
+                        $passwordEncoder->encodePassword(
+                            $user,
+                            $form->get('password')->getData()
+                        )
+                    );
+                    $em->persist($user);
+                    $em->remove($token);
+                    $em->flush();
+
+                    $this->addFlash("success", "mot de passe changé");
+
+                    return $this->redirectToRoute('login');
+
+                } catch (\Exception $e) {
+                    $this->addFlash("error", "erreur dans l'enregistrement du mot de passe");
+                }
+            }
+            if ($token && $token->getExpirationDate() > new \DateTime()) {
+                return $this->render('registration/resetPassword.html.twig', array(
+                    'ResetPasswordUser' => $form->createView(),
+                ));
+            } else {
+                $this->addFlash("error", "token invalide");
+            }
+        } else {
+            $this->addFlash("error", "pas de token");
+        }
+        return $this->redirectToRoute('login');
     }
 }

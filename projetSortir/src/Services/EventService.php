@@ -35,7 +35,7 @@ class EventService
                         $em->remove($event);
                         $string .= $event . " archive ";
 
-                    } elseif ($date == $now) { //don't working because it's DateTime
+                    } elseif ($date == $now) {  //don't working because it's DateTime
                         $event->setState($stateRepository->findBy(['denomination' => 'Activité en cours'])[0]);
                         $em->persist($event);
                         $string .= $event . " active ";

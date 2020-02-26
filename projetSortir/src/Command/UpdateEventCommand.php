@@ -44,7 +44,7 @@ class UpdateEventCommand extends Command
         $output->write( $this->eventService->updateStateEvent($this->container->get('doctrine')->getManager()));
 
 
-        $output->write('finish ');
+        $output->write(' finish ');
         return 0;
     }
 }

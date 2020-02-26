@@ -78,6 +78,11 @@ class User implements UserInterface
      */
     private $imagePath;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Token", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $token;
+
     public function __construct()
     {
         $this->eventsList = new ArrayCollection();
@@ -294,6 +299,24 @@ class User implements UserInterface
     public function setImagePath(?string $imagePath): self
     {
         $this->imagePath = $imagePath;
+
+        return $this;
+    }
+
+    public function getToken(): ?Token
+    {
+        return $this->token;
+    }
+
+    public function setToken(?Token $token): self
+    {
+        $this->token = $token;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newUser = null === $token ? null : $this;
+        if ($token->getUser() !== $newUser) {
+            $token->setUser($newUser);
+        }
 
         return $this;
     }
