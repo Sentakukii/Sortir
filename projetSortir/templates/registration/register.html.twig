@@ -7,5 +7,9 @@
 
     {{ form(registrationForm) }}
 
+    {% if is_granted('ROLE_ADMIN') %}
     {{ form(csvForm) }}
+        <button class="btn btn-primary" onclick="window.location='{{ path('generateToken') }}';">Générer un token</button>
+    {% endif %}
+
 {% endblock %}

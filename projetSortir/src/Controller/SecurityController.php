@@ -8,6 +8,7 @@ use App\Entity\Token;
 use App\Entity\User;
 use App\Form\SendResetPasswordUserType;
 use App\Repository\UserRepository;
+use App\Services\ToolBoxService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,6 +19,14 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
+
+    private $toolBoxService;
+
+    public function __construct()
+    {
+        $this->toolBoxService = new ToolBoxService();
+    }
+
     /**
      * @Route("/login", name="login")
      */
@@ -59,19 +68,25 @@ class SecurityController extends AbstractController
                     $token = $user->getToken();
                 } else {
                     $token = new Token();
-                    $token->setName($this->random(25));
+                    $token->setName($this->toolBoxService->random(25));
                     $token->setUser($user);
-                    $token->setType($this->getParameter('type_password'));
+                    $token->setType($this->getParameter('type_token_password'));
                 }
                 $token->setExpirationDate((new \DateTime())->modify('+1 day'));
                 $em->persist($token);
                 $em->flush();
-                /*send Email
-                return $this->redirectToRoute('login');
-                */
-                /* TEST */
+                /*SEND Email to admin */
+                /*
+                 * TODO send email
+                 * return $this->redirectToRoute('login');
+                 */
+                /*END SEND*/
+
+
+                /* DEV */
+                // TODO remove
                 return $this->redirectToRoute('resetPassword',["key" => $token->getName() , "idUser" => $token->getUser()->getId()]);
-                /*END TEST*/
+                /*END DEV*/
             }else{
                 $this->addFlash("error","adresse email non reconnue");
             }
@@ -84,13 +99,5 @@ class SecurityController extends AbstractController
 
 
 
-    private function random($var){
-        $string = "";
-        $chaine = "a0b1c2d3e4f5g6h7i8j9klmnpqrstuvwxy123456789";
-        srand((double)microtime()*1000000);
-        for($i=0; $i<$var; $i++){
-            $string .= $chaine[rand()%strlen($chaine)];
-        }
-        return $string;
-    }
+
 }
