@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
-{% block menu %}{% endblock %}
+
+
 
 
 {% block body %}
-    <h1>Register</h1>
 
+
+    <h1>Register</h1>
+    {% if is_granted('ROLE_ADMIN') %}
     {{ form(registrationForm) }}
 
-    {% if is_granted('ROLE_ADMIN') %}
     {{ form(csvForm) }}
         <button class="btn btn-primary" onclick="window.location='{{ path('generateToken') }}';">Générer un token</button>
     {% endif %}

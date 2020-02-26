@@ -106,21 +106,19 @@
                                     <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
                                 {% endif %}
                             {% endif %}
-                        {% elseif event.state == 'Ouverte' and date(event.getLimitInscription()) > date() %}
+                        {% elseif event.state == 'Ouverte' or event.state == 'Cloturée' %}
                             {% if is_granted('ROLE_ADMIN') %}
-                                {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
-                                    <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
-                                    <span>-</span>
-                                {% endif %}
+                                <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
+                                <span>-</span>
                             {% endif %}
                             <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
                             {% if event in app.user.eventsList %}
                                 <span>-</span>
-                                <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.getId() }})">Se désister</a>
+                                <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.id }})">Se désister</a>
                             {% else %}
-                                {% if event.getUsersList()|length != event.getMaxInscriptions() %}
+                                {% if event.getUsersList()|length != event.getMaxInscriptions() and event.state == 'Ouverte' %}
                                     <span>-</span>
-                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.getId() }}, )">S'inscrire</a>
+                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.id }}, )">S'inscrire</a>
                                 {% endif %}
                             {% endif %}
 

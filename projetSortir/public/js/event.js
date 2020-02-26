@@ -127,7 +127,8 @@ function getLocations(select , url) {
                select.add(option);
            }
         },
-        error : function(json, status){
+        error : function(response, status){
+            var json= response.responseJSON;
             (new App.Flash()).danger(json.msg);
         }
     });

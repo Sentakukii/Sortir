@@ -7,8 +7,7 @@ function registerEvent(eventId) {
         data: 'eventId='+eventId,
         success : function(json, status){
             (new App.Flash()).success(json.msg);
-            console.log("json: "+JSON.stringify(json));
-            console.log("json.nbRegister: "+json.nbRegister);
+            console.log("json: "+JSON.stringify(json,null,2));
             document.getElementById("nbRegister_"+eventId).textContent = json.nbRegister;
             document.getElementById("cross_menu_"+eventId).classList.remove('hide');
             var registerButton = document.getElementById("register_button_"+eventId);
@@ -17,7 +16,9 @@ function registerEvent(eventId) {
                 deregisterEvent(eventId)
             };
         },
-        error : function(json, status){
+        error : function(response, status){
+            var json= response.responseJSON;
+            console.log("json: "+JSON.stringify(json,null,2));
             (new App.Flash()).danger(json.msg);
             document.getElementById("nbRegister_"+eventId).textContent = json.nbRegister;
         }
@@ -25,26 +26,30 @@ function registerEvent(eventId) {
 }
 
 function deregisterEvent(eventId) {
-    $.ajax({
-        url: urlDeregister,
-        type: 'POST',
-        data: 'eventId=' + eventId,
-        success: function (json, status) {
-            (new App.Flash()).success(json.msg);
-            console.log("json: "+JSON.stringify(json));
-            document.getElementById("nbRegister_" + eventId).innerHTML = json.nbRegister;
-            document.getElementById("cross_menu_" + eventId).classList.add('hide');
-            var registerButton = document.getElementById("register_button_" + eventId);
-            registerButton.textContent = "S'inscrire";
-            registerButton.onclick = function () {
-                registerEvent(eventId)
-            };
-        },
-        error: function (json, status, error, res) {
-            (new App.Flash()).danger(json.msg);
-            document.getElementById("nbRegister_" + eventId).textContent = json.nbRegister;
-        }
-    });
+    if(confirm("Êtes-vous sur de vous désister ? ")) {
+        $.ajax({
+            url: urlDeregister,
+            type: 'POST',
+            data: 'eventId=' + eventId,
+            success: function (json, status) {
+                console.log("json: "+JSON.stringify(json,null,2));
+                (new App.Flash()).success(json.msg);
+                document.getElementById("nbRegister_" + eventId).innerHTML = json.nbRegister;
+                document.getElementById("cross_menu_" + eventId).classList.add('hide');
+                var registerButton = document.getElementById("register_button_" + eventId);
+                registerButton.textContent = "S'inscrire";
+                registerButton.onclick = function () {
+                    registerEvent(eventId)
+                };
+            },
+            error: function (response) {
+                var json= response.responseJSON;
+                console.log("json: "+JSON.stringify(json,null,2));
+                (new App.Flash()).danger(json.msg);
+                document.getElementById("nbRegister_" + eventId).textContent = json.nbRegister;
+            }
+        });
+    }
 }
 
 function cancelEvent(eventId ,comment, url) {
@@ -56,7 +61,8 @@ function cancelEvent(eventId ,comment, url) {
             (new App.Flash()).success(json.msg);
            document.getElementById("cancel_button_"+eventId).classList.add("hide");
         },
-        error: function (json, status, error, res) {
+        error: function (response) {
+            var json= response.responseJSON;
             (new App.Flash()).danger(json.msg);
         }
     });

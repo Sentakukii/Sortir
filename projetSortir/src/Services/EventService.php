@@ -28,22 +28,28 @@ class EventService
                 $limitDate->modify('-1 month');
                 if ($date instanceof \DateTime && $limitDate instanceof \DateTime) {
 
-                    if ($date < $limitDate) {
-                        $event->setState($stateRepository->findBy(['denomination' => 'Cloturée'])[0]);
-                        $eventArchive = new EventArchive($event);
-                        $em->persist($eventArchive);
-                        $em->remove($event);
-                        $string .= $event . " archive ";
-
-                    } elseif ($date == $now) {  //don't working because it's DateTime
+                    if ($date == $now) {  //don't working because it's DateTime
                         $event->setState($stateRepository->findBy(['denomination' => 'Activité en cours'])[0]);
                         $em->persist($event);
                         $string .= $event . " active ";
 
                     } elseif ($date < $now) {
                         $event->setState($stateRepository->findBy(['denomination' => 'Passée'])[0]);
+
+                        if ($date < $limitDate) {
+                            $eventArchive = new EventArchive($event);
+                            $em->persist($eventArchive);
+                            $em->remove($event);
+                            $string .= $event . " archive ";
+                        } else {
+                            $string .= $event . " past ";
+                            $em->persist($event);
+                        }
+
+                    }elseif ($event->getLimitInscription() < $now){
+                        $event->setState($stateRepository->findBy(['denomination' => 'Cloturée'])[0]);
                         $em->persist($event);
-                        $string .= $event . " past ";
+                        $string .= $event . " cloturee ";
                     }
                 }
             }

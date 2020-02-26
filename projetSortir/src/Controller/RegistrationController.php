@@ -48,9 +48,6 @@ class RegistrationController extends AbstractController
             $user = new User();
             $form = $this->createForm(RegistrationFormType::class, $user);
             $form->handleRequest($request);
-            $filename = null;
-            $formCsv = $this->createForm(ImportCsvType::class, $filename);
-            $formCsv->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 // encode the plain password
@@ -67,27 +64,48 @@ class RegistrationController extends AbstractController
                 }
                 $em->flush();
 
-                return $guardHandler->authenticateUserAndHandleSuccess(
-                    $user,
-                    $request,
-                    $authenticator,
-                    'main' // firewall name in security.yaml
-                );
-            } elseif ($formCsv->isSubmitted() && $formCsv->isValid() && $isAdmin) {
-                $filename = $formCsv->get('csvPath')->getData();
-                $this->importCSV($passwordEncoder, $em , $filename);
+                if (!$isAdmin) {
+                    return $guardHandler->authenticateUserAndHandleSuccess(
+                        $user,
+                        $request,
+                        $authenticator,
+                        'main' // firewall name in security.yaml
+                    );
+                }else{
+                    return $this->redirectToRoute("home");
+                }
             }
 
-            return $this->render('registration/register.html.twig', [
-                'registrationForm' => $form->createView(),
-                'csvForm' => $formCsv->createView(),
-            ]);
+            if($isAdmin){
+                $filename = null;
+                $formCsv = $this->createForm(ImportCsvType::class, $filename);
+                $formCsv->handleRequest($request);
+                if ($formCsv->isSubmitted() && $formCsv->isValid() ) {
+                    $filename = $formCsv->get('csvPath')->getData();
+                    $this->importCSV($passwordEncoder, $em, $filename);
+                }
+                return $this->render('registration/registerAdmin.html.twig', [
+                        'registrationForm' => $form->createView(),
+                        'csvForm' => $formCsv->createView(),
+                ]);
+
+            }else {
+                return $this->render('registration/registerUser.html.twig', [
+                    'registrationForm' => $form->createView(),
+                ]);
+            }
+
         }
         return $this->redirectToRoute('home');
     }
 
 
-
+    /**
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param EntityManagerInterface $em
+     * @param $filename
+     * @return Response
+     */
     private function importCSV(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em , $filename ): Response
     {
         try {
