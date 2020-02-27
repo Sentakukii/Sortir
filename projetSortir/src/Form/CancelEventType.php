@@ -13,7 +13,9 @@ class CancelEventType extends AbstractType
     {
         $builder
             ->add('comment',null,array('label' => 'Motif d\'annulation :'))
-            ->add('Enregistrer', SubmitType::class)
+            ->add('Enregistrer', SubmitType::class, [
+            'attr' => ['class'=> 'round-button btn-primary btn']
+            ])
         ;
     }
 

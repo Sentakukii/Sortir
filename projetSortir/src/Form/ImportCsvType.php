@@ -29,7 +29,9 @@ class ImportCsvType extends AbstractType
                     ])
                 ],
             ])
-            ->add('Importer', SubmitType::class)
+            ->add('Importer', SubmitType::class, [
+                'attr' => ['class'=> 'round-button btn-success btn']
+            ])
         ;
     }
 

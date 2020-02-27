@@ -13,7 +13,9 @@ class SendResetPasswordUserType extends AbstractType
     {
         $builder
             ->add('email',null,array('label' => 'Email :'))
-            ->add('Enregistrer', SubmitType::class)
+            ->add('Enregistrer', SubmitType::class, [
+                'attr' => ['class'=> 'round-button btn-primary btn']
+            ])
         ;
     }
 

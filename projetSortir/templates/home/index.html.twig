@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="col-md-3 offset-md-1 text-center">
-                <input type="submit" value="Rechercher" class="btn btn-primary"/>
+                <input type="submit" value="Rechercher" class="btn btn-primary round-button"/>
             </div>
         </div>
     </form>
@@ -137,9 +137,9 @@
         </table>
     </div>
     {% if app.user.active %}
-        <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
+        <button class="btn btn-primary round-button" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
     {% endif %}
-    <button class="btn btn-primary" onclick="window.location='{{ path('user') }}';">Tous les utilisateurs</button>
+    <button class="btn btn-primary round-button" onclick="window.location='{{ path('user') }}';">Tous les utilisateurs</button>
 {% endblock %}
 
 {% block javascripts %}

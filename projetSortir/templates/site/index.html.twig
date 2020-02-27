@@ -12,7 +12,7 @@
     <div class="row">
         <h4>Le nom contient :&nbsp;</h4>
         <input type="text" id="searchInput">
-        <button id="site_button" class="btn btn-primary search_button">Rechercher</button>
+        <button id="site_button" class="btn btn-primary search_button round-button">Rechercher</button>
     </div>
 
     <div class="container">
@@ -48,7 +48,7 @@
     </div>
     {% if is_granted('ROLE_ADMIN') %}
         <div class="row justify-content-center">
-            <button onclick="window.location='{{ path('newSite') }}'" class="btn btn-primary" >Ajouter</button>
+            <button onclick="window.location='{{ path('newSite') }}'" class="btn btn-primary round-button" >Ajouter</button>
         </div>
     {% endif %}
 

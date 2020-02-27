@@ -45,12 +45,12 @@
             </div>
         </div>
         <div id="buttonList">
-            <button class="btn btn-primary" type="button" onclick="submitForm(0)">Créer</button>
-            <button class="btn btn-primary offset-md-2" type="button" onclick="submitForm(1)">Publier la sortie</button>
+            <button class="btn btn-primary" type="button round-button" onclick="submitForm(0)">Créer</button>
+            <button class="btn btn-primary offset-md-2 round-button" type="button" onclick="submitForm(1)">Publier la sortie</button>
             {% if is_granted('ROLE_ADMIN') and event.id %}
-               <button class="btn btn-danger offset-md-2" type="button" onclick="window.location='{{ path('removeEvent') }}?eventId={{ event.id }}';">Supprimer la sortie</button>
+               <button class="btn btn-danger offset-md-2 round-button" type="button" onclick="window.location='{{ path('removeEvent') }}?eventId={{ event.id }}';">Supprimer la sortie</button>
             {% endif %}
-            <button class="btn btn-danger offset-md-2" type="button">Annuler</button>
+            <button class="btn btn-danger offset-md-2 round-button" type="button">Annuler</button>
 
         </div>
         <div class="hide">
