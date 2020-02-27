@@ -93,12 +93,17 @@ body {
 }
 
 .cross.plus:hover, .cross.minus:hover{
-    background-color: black;
+    background-color: #0069d9;
 }
 
 .cross.plus::after, .cross.minus::after{
     transform: rotate(90deg);
 }
+.cross.plus:hover::after, .cross.minus:hover::after , .cross:hover::before, .cross.minus:hover::before{
+    background: white;
+}
+
+
 .cross.plus::before{
     transform: rotate(90deg);
 }

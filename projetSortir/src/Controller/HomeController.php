@@ -75,6 +75,7 @@ class HomeController extends AbstractController
         $state = $stateRepo->find('2');
         $event->setState($state);
         $events = $this->homeService->buildQuery($request, $eventRepo, $siteRepo , $this->getUser());
+        $this->addFlash("Sortie publié");
         $em->persist($event);
         $em->flush();
         

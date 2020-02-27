@@ -36,11 +36,11 @@
                 </div>
                 <div class="row search_form_row">
                     <label class="col-md-2" for="date_start">entre : </label>
-                    <!-- WOOW holy shit! it's Amaziiing, it works-->
-                    <input class="col-md-2.5" type="date" id="date_start" name="date_start" value="{{app.request.query.get('date_start')}}"/>
+                    <!-- WOOW holy shit! it's Amaziiing, it works -->
+                    <input class="col-md-3" type="date" id="date_start" name="date_start" value="{{app.request.query.get('date_start')}}"/>
                     <div class="col-md-1 text-center image_calendar">&nbsp;</div>
                     <span class="col-md-1 text-center"> et </span>
-                    <input  class="col-md-2.5" type="date" id="date_end" name="date_end" value="{{app.request.query.get('date_end')}}"/>
+                    <input  class="col-md-3" type="date" id="date_end" name="date_end" value="{{app.request.query.get('date_end')}}"/>
                     <div class="col-md-1 text-center image_calendar">&nbsp;</div>
                 </div>
             </div>
@@ -109,14 +109,15 @@
                                         <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
                                         <span>-</span>
                                         <a href="{{ path('publishEvent') }}?eventId={{ event.id }}">Publier</a>
-                                    {% elseif event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
+                                    {% elseif event.getState() == 'Ouverte' %}
                                         <span>-</span>
                                         <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
                                     {% endif %}
                                 {% elseif event.state == 'Ouverte' or event.state == 'Cloturée' %}
-                                    {% if is_granted('ROLE_ADMIN') %}
+                                    {% if is_granted('ROLE_ADMIN') and event.state =='Ouverte' %}
                                         <span>-</span>
                                         <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
+
                                     {% endif %}
                                     {% if app.user.active %}
                                         {% if event in app.user.eventsList %}

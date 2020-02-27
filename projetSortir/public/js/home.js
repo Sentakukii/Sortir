@@ -45,20 +45,3 @@ function deregisterEvent(eventId) {
         });
     }
 }
-
-function cancelEvent(eventId ,comment, url) {
-    $.ajax({
-        url: url,
-        type: 'POST',
-        data: 'eventId=' + eventId+'&comment=' + comment,
-        success: function (json, status) {
-            (new App.Flash()).success(json.msg);
-           document.getElementById("cancel_button_"+eventId).classList.add("hide");
-            document.querySelector("input[type='file']");
-        },
-        error: function (response) {
-            var json= response.responseJSON;
-            (new App.Flash()).danger(json.msg);
-        }
-    });
-}
