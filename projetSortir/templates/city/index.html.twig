@@ -11,8 +11,8 @@
     </div>
     <div class="row">
         <h4>Le nom contient : </h4>
-        <input type="text">
-        <button type="button" class="btn btn-primary">Rechercher</button>
+        <input id="searchInput" type="text">
+        <button id="city_button" type="button" class="btn btn-primary">Rechercher</button>
     </div>
     <div class="row">
         <table class="table">
@@ -25,7 +25,10 @@
             </thead>
             <tbody>
             {% for city in cities %}
-                <tr id="row_event_{{ city.id }}">
+                <tr id="row_city_{{ city.id }}">
+                    <script>
+                        citiesArray.push([{{ city.id }}, '{{ city.getName() }}']);
+                    </script>
                     <td>{{ city.getName() }}</td>
                     <td>{{ city.getPostalCode() }}</td>
                     <td>
@@ -44,4 +47,29 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+    </script>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var citiesArray = [];
+        $(document).ready(function() {
+            document.getElementById('city_button').addEventListener('click', function() {
+                var matchCriteria = document.getElementById('searchInput').value;
+                var regexp = new RegExp('^.*'+matchCriteria+'.*$', 'i');
+                console.log("regexp: "+regexp);
+                var selector = '';
+                for (var i = 0; i<citiesArray.length; i++) {
+                    selector = 'row_city_'+citiesArray[i][0];
+                    if (regexp.test(citiesArray[i][1])) {
+                        document.getElementById(selector).removeAttribute('style');
+                    } else {
+                        document.getElementById(selector).style.display = "none";
+                    }
+                }
+            })
+        });
+    </script>
 {% endblock %}
