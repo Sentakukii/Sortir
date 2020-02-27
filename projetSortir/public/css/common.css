@@ -8,6 +8,9 @@ table{
     margin-top: 2rem;
     text-align: center;
 }
+.round-button{
+    border-radius: 25px; !important;
+}
 #container{
     width: calc(100% - 20px);
     padding: 20px;
@@ -16,7 +19,7 @@ table{
     margin-bottom: 45px;
 }
 .content{
-    margin-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 .menu_link{
@@ -123,6 +126,10 @@ table{
     background-size: 30px;
     background-repeat: no-repeat;
     background-position: 97%;
+}
+#link_passwordForbidden{
+    text-align: right;
+    margin-top: 5px;
 }
 
 
