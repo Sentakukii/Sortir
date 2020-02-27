@@ -11,8 +11,8 @@
     </div>
     <div class="row">
         <h4>Le nom contient : </h4>
-        <input type="text" id="sites">
-        <button type="button" class="btn btn-primary">Rechercher</button>
+        <input type="text" id="searchInput">
+        <button id="site_button" class="btn btn-primary">Rechercher</button>
     </div>
     <div class="row">
         <table class="table">
@@ -26,7 +26,7 @@
             {% for site in sites %}
                 <tr id="row_site_{{ site.id }}">
                     <script>
-                        sitesArray.push([{{ city.id }}, '{{ city.getName() }}']);
+                        sitesArray.push([{{ site.id }}, '{{ site.getName() }}']);
                     </script>
                     <td>{{ site.getName() }}</td>
                     <td>
@@ -50,12 +50,12 @@
     <script>
         var sitesArray = [];
         $(document).ready(function() {
-            document.getElementById('city_button').addEventListener('click', function() {
+            document.getElementById('site_button').addEventListener('click', function() {
                 var matchCriteria = document.getElementById('searchInput').value;
                 var regexp = new RegExp('^.*'+matchCriteria+'.*$', 'i');
                 var selector = '';
                 for (var i = 0; i<sitesArray.length; i++) {
-                    selector = 'row_city_'+sitesArray[i][0];
+                    selector = 'row_site_'+sitesArray[i][0];
                     if (regexp.test(sitesArray[i][1])) {
                         document.getElementById(selector).removeAttribute('style');
                     } else {
