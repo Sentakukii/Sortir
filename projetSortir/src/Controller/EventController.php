@@ -147,6 +147,7 @@ class EventController extends AbstractController
         return $this->render('event/edit.html.twig', [
             'form' => $form->createView(),
             'cities' => $cities,
+            'event' => $event,
         ]);
     }
 
@@ -230,5 +231,23 @@ class EventController extends AbstractController
         return $this->render('event/cancel.html.twig', array(
             'cancelEventForm' => $form->createView(),
         ));
+    }
+
+    /**
+     * @Route("/event/remove", name="removeEvent")
+     * @IsGranted("ROLE_USER_ACTIVE")
+     */
+    public function removeEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
+    {
+        $event = $eventRepository->find($request->query->get('eventId'));
+
+        if (!$event) {
+            $this->addFlash("success", "Sortie introuvable");
+        } else {
+            $this->addFlash("success", "Suppression de la sortie réussit");
+            $em->remove($event);
+            $em->flush();
+        }
+        return $this->redirectToRoute('home');
     }
 }
