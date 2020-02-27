@@ -36,12 +36,9 @@
                 </div>
                 <div class="row search_form_row">
                     <label class="col-md-2" for="date_start">entre : </label>
-                    <!-- WOOW holy shit! it's Amaziiing, it works -->
-                    <input class="col-md-3" type="date" id="date_start" name="date_start" value="{{app.request.query.get('date_start')}}"/>
-                    <div class="col-md-1 text-center image_calendar">&nbsp;</div>
+                    <input class="col-md-4" type="date" id="date_start" name="date_start" value="{{app.request.query.get('date_start')}}"/>
                     <span class="col-md-1 text-center"> et </span>
-                    <input  class="col-md-3" type="date" id="date_end" name="date_end" value="{{app.request.query.get('date_end')}}"/>
-                    <div class="col-md-1 text-center image_calendar">&nbsp;</div>
+                    <input  class="col-md-4" type="date" id="date_end" name="date_end" value="{{app.request.query.get('date_end')}}"/>
                 </div>
             </div>
             <div class="col-md-3 offset-md-1">
@@ -117,7 +114,6 @@
                                     {% if is_granted('ROLE_ADMIN') and event.state =='Ouverte' %}
                                         <span>-</span>
                                         <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
-
                                     {% endif %}
                                     {% if app.user.active %}
                                         {% if event in app.user.eventsList %}

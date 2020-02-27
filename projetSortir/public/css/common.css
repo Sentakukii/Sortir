@@ -153,3 +153,10 @@ body {
 .save_button {
     margin-right:5px;
 }
+#date_start, #date_end{
+    background-image: url("/img/calendar.png");
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: 97%;
+    border: solid 1px;
+}
