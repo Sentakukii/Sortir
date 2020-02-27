@@ -23,7 +23,7 @@ class ResetPasswordUserType extends AbstractType
                 'second_options' => ['label' => 'Confirmation'],
             ])
             ->add('Enregistrer', SubmitType::class, [
-                'attr' => ['class'=> 'round-button btn-primary btn']
+                'attr' => ['class'=> 'round-button btn-primary btn btn-block']
             ])
         ;
     }
