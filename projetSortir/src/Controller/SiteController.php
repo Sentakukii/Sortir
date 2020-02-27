@@ -4,15 +4,19 @@ namespace App\Controller;
 
 use App\Entity\Site;
 use App\Form\SiteType;
+use App\Repository\SiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class SiteController extends AbstractController
 {
     /**
      * @Route("/site", name="site")
+     *
      */
     public function index(EntityManagerInterface $em)
     {
@@ -25,6 +29,7 @@ class SiteController extends AbstractController
 
     /**
      * @Route("/newSite", name="newSite")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function newSite(Request $request, EntityManagerInterface $em)
     {
@@ -50,6 +55,7 @@ class SiteController extends AbstractController
 
     /**
      * @Route("/editSite", name="editSite")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function editSite(Request $request, EntityManagerInterface $em)
     {
@@ -74,19 +80,24 @@ class SiteController extends AbstractController
         ]);
     }
 
+
     /**
-     * @Route("/deleteSite", name="deleteSite")
+     * @Route("/removeSite", name="removeSite")
+     * @IsGranted("ROLE_ADMIN")
      */
-    public function deleteSite(Request $request, EntityManagerInterface $em)
+    public function removeSite(Request $request , EntityManagerInterface $em , SiteRepository $siteRepository)
     {
-        $sitesRepository = $em->getRepository(Site::class);
-        $site = $sitesRepository->find($request->get('siteId'));
+        $response = new JsonResponse();
+        $site = $siteRepository->find($request->request->get('id'));
 
-        $em->remove($site);
-        $em->flush();
-
-        $this->addFlash("success", "Site supprimée"); // info warning error
-
-        return $this->redirectToRoute('home');
+        if (!$site) {
+            $response->setContent(json_encode(['msg' => 'Site introuvable']));
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        } else {
+            $em->remove($site);
+            $em->flush();
+            $response->setContent(json_encode(['msg' => "Suppression du site réussit" ]));
+        }
+        return $response;
     }
 }

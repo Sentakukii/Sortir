@@ -23,7 +23,7 @@
                     <th scope="col" class="col-md-4">Ville</th>
                     <th scope="col" class="col-md-4">Code Postal</th>
                     {% if is_granted('ROLE_ADMIN') %}
-                     <th scope="col" class="col-md-4">Actions</th>
+                        <th scope="col" class="col-md-4">Actions</th>
                     {% endif %}
             </tr>
             </thead>
@@ -38,8 +38,7 @@
                     {% if is_granted('ROLE_ADMIN') %}
                     <td>
                         <a href="{{ path('editCity', { 'cityId': city.id }) }}">Modifier</a> -
-                        <a href="{{ path('deleteCity', { 'cityId': city.id }) }}">Supprimer</a>
-                         {# <a href="javascript:void(0)" onclick="removeEntity({{ city.id }} ,'row_city_' )">Supprimer</a>#}
+                          <a href="javascript:void(0)" onclick="removeEntity({{ city.id }} ,'row_city_' )">Supprimer</a>
                     </td>
                     {% endif %}
                     </tr>
@@ -48,7 +47,6 @@
             </table>
         </div>
     </div>
-
     {% if app.user.active %}
         <div class="row justify-content-center">
             <button onclick="window.location='{{ path('newCity') }}'" class="btn btn-primary" >Ajouter</button>
@@ -59,7 +57,7 @@
 
 {% block javascripts %}
     <script>
-        var urlRemove = {{ url("removeCity") }}
+        var urlRemove = '{{ url("removeCity") }}';
         var citiesArray = [];
         $(document).ready(function() {
             document.getElementById('city_button').addEventListener('click', function() {

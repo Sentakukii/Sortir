@@ -14,40 +14,49 @@
         <input type="text" id="searchInput">
         <button id="site_button" class="btn btn-primary">Rechercher</button>
     </div>
-    <div class="row">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Ville</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for site in sites %}
-                <tr id="row_site_{{ site.id }}">
-                    <script>
-                        sitesArray.push([{{ site.id }}, '{{ site.getName() }}']);
-                    </script>
-                    <td>{{ site.getName() }}</td>
-                    <td>
-                        <a href="{{ path('editSite', { 'siteId': site.id }) }}">Modifier</a> -
-                        <a href="{{ path('deleteSite', { 'siteId': site.id }) }}">Supprimer</a>
-                    </td>
+
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Ville</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th scope="col">Actions</th>
+                    {% endif %}
                 </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td>
-                    <a href="{{ path('newSite') }}">ajouter</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for site in sites %}
+                    <tr id="row_site_{{ site.id }}">
+                        <script>
+                            sitesArray.push([{{ site.id }}, '{{ site.getName() }}']);
+                        </script>
+                        <td>{{ site.getName() }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <td>
+                                <a href="{{ path('editSite', { 'siteId': site.id }) }}">Modifier</a> -
+                                <a href="javascript:void(0)" onclick="removeEntity({{ site.id }} ,'row_site_')">Supprimer</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="row justify-content-center">
+            <button onclick="window.location='{{ path('newSite') }}'" class="btn btn-primary" >Ajouter</button>
+        </div>
+    {% endif %}
+
 {% endblock %}
 
 {% block javascripts %}
     <script>
+        var urlRemove = '{{ url("removeSite") }}';
         var sitesArray = [];
         $(document).ready(function() {
             document.getElementById('site_button').addEventListener('click', function() {

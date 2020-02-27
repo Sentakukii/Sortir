@@ -60,3 +60,4 @@ function removeEntity(entityId, nameTr) {
         });
     }
 }
+
