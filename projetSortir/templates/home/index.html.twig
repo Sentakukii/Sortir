@@ -11,6 +11,11 @@
             <div id="name">
                 <span>Participant : </span><span>{{ app.user.name }} {{ app.user.firstName }}</span>
             </div>
+            {% if not app.user.active %}
+                <div>
+                    <span class="red">desactivé</span>
+                </div>
+            {% endif %}
         </div>
     </div>
     <div class="row"><h2>Filtrer les sorties</h2></div>

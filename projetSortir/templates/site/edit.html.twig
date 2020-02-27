@@ -4,12 +4,24 @@
 
 {% block body %}
 
-    {{ form_start(siteForm) }}
+    <div class="text-center title">
+        <h1>Création d'un site</h1>
+    </div>
 
-    {{ form_rest(siteForm) }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                {{ form_start(siteForm) }}
 
-    <input class="btn btn-primary" type="submit" value="Enregistrer"/>
-    <a href="{{ path('home') }}" class="btn btn-primary" role="button">Annuler</a>
-    {{ form_end(siteForm) }}
+                {{ form_rest(siteForm) }}
+
+                <div class="row justify-content-center">
+                    <input class="btn btn-primary save_button" type="submit" value="Enregistrer"/>
+                    <a href="{{ path('home') }}" class="btn btn-danger" role="button">Annuler</a>
+                </div>
+                {{ form_end(siteForm) }}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

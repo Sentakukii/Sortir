@@ -8,9 +8,13 @@ table{
     margin-top: 2rem;
     text-align: center;
 }
+body {
+    background-color: #f7f8fc;
+}
 .round-button{
     border-radius: 25px; !important;
 }
+
 #container{
     width: calc(100% - 20px);
     padding: 20px;
@@ -132,4 +136,14 @@ table{
     margin-top: 5px;
 }
 
+.red{
+    color:red;
+}
 
+.search_button {
+    margin-left:5px;
+}
+
+.save_button {
+    margin-right:5px;
+}

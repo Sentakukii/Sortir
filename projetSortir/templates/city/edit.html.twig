@@ -4,12 +4,24 @@
 
 {% block body %}
 
-    {{ form_start(cityForm) }}
+    <div class="text-center title">
+        <h1>Création d'une ville</h1>
+    </div>
 
-    {{ form_rest(cityForm) }}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                {{ form_start(cityForm) }}
 
-    <input class="btn btn-primary" type="submit" value="Enregistrer"/>
-    <a href="{{ path('home') }}" class="btn btn-primary" role="button">Annuler</a>
-    {{ form_end(cityForm) }}
+                {{ form_rest(cityForm) }}
+
+                <div class="row justify-content-center">
+                    <input class="btn btn-primary save_button" type="submit" value="Enregistrer"/>
+                    <a href="{{ path('home') }}" class="btn btn-danger" role="button">Annuler</a>
+                </div>
+                {{ form_end(cityForm) }}
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
