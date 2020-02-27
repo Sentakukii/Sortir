@@ -62,7 +62,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/publishEvent", name="publishEvent")
      */
-    public function publishEvent(SiteRepository $siteRepo, EventRepository $eventRepo, StateRepository $stateRepo,Request $request)
+    public function publishEvent(EntityManagerInterface $em, SiteRepository $siteRepo, EventRepository $eventRepo, StateRepository $stateRepo,Request $request)
     {
         $siteSelected = $request->query->get('site');
         if($siteSelected == null){
@@ -75,7 +75,9 @@ class HomeController extends AbstractController
         $state = $stateRepo->find('2');
         $event->setState($state);
         $events = $this->homeService->buildQuery($request, $eventRepo, $siteRepo , $this->getUser());
-
+        $em->persist($event);
+        $em->flush();
+        
         return $this->render('home/index.html.twig', array(
             'sites' => $siteRepo->findAll(),
             'events' => $events,
