@@ -23,8 +23,13 @@
                         <td><a href="{{ path('displayProfil') }}?userId={{ user.getId() }}">{{ user.firstname }}</a></td>
                         {% if is_granted('ROLE_ADMIN') %}
                             <td>
-                                <a href="#">Supprimer</a><span>-</span>
-                                <a href="#">Desactiver</a>
+                                <a href="javascript:void(0)" onclick="removeUser({{ user.id }})">Supprimer</a>
+                                <span>-</span>
+                                {% if user.active %}
+                                    <a href="#">Desactiver</a>
+                                {% else %}
+                                    <a href="#">Activer</a>
+                                {% endif %}
                             </td>
                         {% endif %}
                     </tr>
@@ -33,4 +38,11 @@
             </table>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src=" {{ asset('js/user.js') }} " ></script>
+    <script>
+        var urlRemove = '{{ url('removeUser') }}';
+    </script>
 {% endblock %}

@@ -18,7 +18,7 @@ if (typeof App.Flash === typeof undefined) {
         }
 
         return ['success', 'danger', 'warning', 'info']
-            .reduce(function (acc, elt) {
+                .reduce(function (acc, elt) {
                 acc[elt] = function (msg) { make(elt, msg) };
                 return acc;
             }, {});
