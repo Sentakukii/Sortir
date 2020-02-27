@@ -10,6 +10,9 @@
             </div>
             <div id="name">
                 <span>Participant : </span><span>{{ app.user.name }} {{ app.user.firstName }}</span>
+                {% for role in app.user.roles  %}
+                    <span>{{ role }}</span>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -78,58 +81,62 @@
             </thead>
             <tbody>
             {% for event in events %}
-                <tr id="row_event_{{ event.id }}">
-                    <td>{{ event.getName() }}</td>
-                    <td>{{ event.getDate()|date("d/m/Y H:m:s") }}</td>
-                    <td>{{ event.getLimitInscription()|date("d/m/Y") }}</td>
-                    <td><span id="nbRegister_{{ event.getId() }}">{{ event.getUsersList()|length }}</span>/{{ event.getMaxInscriptions() }}</td>
-                    <td>{{ event.getState()}}</td>
-                    <td>
-                        {% if event in app.user.eventsList  %}
-                            <div id="cross_menu_{{ event.getId() }}" class="cross"></div>
-                        {% else %}
-                            <div id="cross_menu_{{ event.getId() }}" class="cross hide"></div>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ path('displayProfil') }}?userId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
-                    </td>
-                    <td>{% if event in app.user.eventsOrganized %}
-                            {% if event.state == 'Créée'%}
-                                <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
-                                <span>-</span>
-                                <a href="{{ path('publishEvent') }}?eventId={{ event.id }}">Publier</a>
+                {% if (event.state == 'Créée' and event in app.user.eventsOrganized) or event.state != 'Créée'  %}
+                    <tr id="row_event_{{ event.id }}">
+                        <td>{{ event.getName() }}</td>
+                        <td>{{ event.getDate()|date("d/m/Y H:m:s") }}</td>
+                        <td>{{ event.getLimitInscription()|date("d/m/Y") }}</td>
+                        <td><span id="nbRegister_{{ event.getId() }}">{{ event.getUsersList()|length }}</span>/{{ event.getMaxInscriptions() }}</td>
+                        <td>{{ event.getState()}}</td>
+                        <td>
+                            {% if event in app.user.eventsList  %}
+                                <div id="cross_menu_{{ event.getId() }}" class="cross"></div>
                             {% else %}
-                                {% if event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
-                                    <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
-                                    <span>-</span>
-                                    <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
+                                <div id="cross_menu_{{ event.getId() }}" class="cross hide"></div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('displayProfil') }}?userId={{ event.getOrganizer().getId() }}">{{ event.getOrganizer() }}</a>
+                        </td>
+                        <td> {% if event.state != 'Créée'%}
+                                <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
+                            {% endif %}
+                            {% if app.user.active %}
+                                {% if event in app.user.eventsOrganized  %}
+                                    {% if event.state == 'Créée'%}
+                                        <a href="{{ path('eventEdit') }}?eventId={{ event.id }}">Modifier</a>
+                                        <span>-</span>
+                                        <a href="{{ path('publishEvent') }}?eventId={{ event.id }}">Publier</a>
+                                    {% elseif event.getState() == 'Ouverte' or event.getState() == 'Clôturée' %}
+                                        <span>-</span>
+                                        <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
+                                    {% endif %}
+                                {% elseif event.state == 'Ouverte' or event.state == 'Cloturée' %}
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <span>-</span>
+                                        <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
+                                    {% endif %}
+                                    {% if app.user.active %}
+                                        {% if event in app.user.eventsList %}
+                                            <span>-</span>
+                                            <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.id }})">Se désister</a>
+                                        {% elseif event.getUsersList()|length != event.getMaxInscriptions() and event.state == 'Ouverte'  %}
+                                                <span>-</span>
+                                                <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.id }}, )">S'inscrire</a>
+                                        {% endif %}
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
-                        {% elseif event.state == 'Ouverte' or event.state == 'Cloturée' %}
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <a href="{{ path('cancelEvent') }}?eventId={{ event.id }}">Annuler</a>
-                                <span>-</span>
-                            {% endif %}
-                            <a id="display_event_button_{{ event.id }}" href="{{ path('event') }}?eventId={{ event.id }}">Afficher</a>
-                            {% if event in app.user.eventsList %}
-                                <span>-</span>
-                                <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="deregisterEvent({{ event.id }})">Se désister</a>
-                            {% else %}
-                                {% if event.getUsersList()|length != event.getMaxInscriptions() and event.state == 'Ouverte' %}
-                                    <span>-</span>
-                                    <a id="register_button_{{ event.id }}" href="javascript:void(0)" onclick="registerEvent({{ event.id }}, )">S'inscrire</a>
-                                {% endif %}
-                            {% endif %}
-
-                        {% endif %}
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>
     </div>
-    <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
+    {% if app.user.active %}
+        <button class="btn btn-primary" onclick="window.location='{{ path('eventCreate') }}';">Créer une sortie</button>
+    {% endif %}
     <button class="btn btn-primary" onclick="window.location='{{ path('user') }}';">Tous les utilisateurs</button>
 {% endblock %}
 

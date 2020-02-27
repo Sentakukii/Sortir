@@ -21,14 +21,16 @@
                     <tr id="row_event_{{ user.id }}">
                         <td><a href="{{ path('displayProfil') }}?userId={{ user.getId() }}">{{ user.name }}</a></td>
                         <td><a href="{{ path('displayProfil') }}?userId={{ user.getId() }}">{{ user.firstname }}</a></td>
-                        {% if is_granted('ROLE_ADMIN') %}
+                        {% if is_granted('ROLE_ADMIN')  %}
                             <td>
-                                <a href="javascript:void(0)" onclick="removeUser({{ user.id }})">Supprimer</a>
-                                <span>-</span>
-                                {% if user.active %}
-                                    <a href="#">Desactiver</a>
-                                {% else %}
-                                    <a href="#">Activer</a>
+                                {% if user.roles[0] != "ROLE_ADMIN" %}
+                                    <a href="javascript:void(0)" onclick="removeEntity({{ user.id }} ,'row_event_' )">Supprimer</a>
+                                    <span>-</span>
+                                    {% if user.active %}
+                                        <a id="link_activate_{{ user.id }}" href="javascript:void(0)" onclick="desactivateUser({{ user.id }})">Désactiver</a>
+                                    {% else %}
+                                        <a  id="link_activate_{{ user.id }}" href="javascript:void(0)" onclick="activateUser({{ user.id }})">Activer</a>
+                                    {% endif %}
                                 {% endif %}
                             </td>
                         {% endif %}
@@ -41,8 +43,13 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src=" {{ asset('js/user.js') }} " ></script>
-    <script>
-        var urlRemove = '{{ url('removeUser') }}';
-    </script>
+    {% if is_granted('ROLE_ADMIN')  %}
+        <script src=" {{ asset('js/user.js') }} " ></script>
+        <script>
+            var urlRemove = '{{ url('removeUser') }}';
+            var urlDesactivate = '{{ url('desactivateUser') }}';
+            var urlActivate = '{{ url('activateUser') }}';
+        </script>
+    {% endif %}
+
 {% endblock %}

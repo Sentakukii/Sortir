@@ -40,3 +40,23 @@ $(document).ready(function() {
         });
     }
 });
+
+
+function removeEntity(entityId, nameTr) {
+    if(confirm("Êtes-vous sur d'effectuer cette suppression ? ")) {
+        $.ajax({
+            url: urlRemove,
+            type: 'POST',
+            data: 'id=' + entityId,
+            success: function (json, status) {
+                (new App.Flash()).success(json.msg);
+                var tr = document.getElementById(nameTr+entityId);
+                tr.parentNode.removeChild(tr);
+            },
+            error: function (response) {
+                var json= response.responseJSON;
+                (new App.Flash()).danger(json.msg);
+            }
+        });
+    }
+}

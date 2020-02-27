@@ -8,10 +8,15 @@ table{
     margin-top: 2rem;
     text-align: center;
 }
-
 #container{
     width: calc(100% - 20px);
     padding: 20px;
+}
+.title{
+    margin-bottom: 45px;
+}
+.content{
+    margin-bottom: 35px;
 }
 
 .menu_link{
@@ -99,12 +104,6 @@ table{
     overflow: auto;
 }
 
-/*.image_profile{
-    position:absolute;
-    height: 15em;
-    top:10em;
-    left:10%;
-}*/
 
 .hide{
     display: none;

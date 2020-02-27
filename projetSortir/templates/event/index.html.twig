@@ -3,105 +3,119 @@
 {% block title %}Hello EventController!{% endblock %}
 
 {% block body %}
-    <div class="row justify-content-center">
-        <h1>Afficher une sortie</h1>
+
+    <div class="title">
+        <div class="row justify-content-center">
+            <h1>{{ event.name }}</h1>
+        </div>
+        <div class="row justify-content-center">
+            <h2>{{ event.state }}</h2>
+        </div>
     </div>
 
-    <div class="row justify-content-center">
+
+    <div class="row content">
         <div class="col-md-6">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <h4>Nom de la sortie :</h4>
-                </div>
-                <div class="col-md-6">
-                    <h4>{{ event.name }}</h4>
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+
+            <div class="row ">
+                <div class="col-md-4 text-right">
                     <h4>Date et heure de la sortie :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.date|date("d/m/Y H:m:s") }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row ">
+                <div class="col-md-4 text-right">
                     <h4>Date limite d'inscrition :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.limitInscription|date("d/m/Y H:m:s") }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row ">
+                <div class="col-md-4 text-right">
                     <h4>Durée :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.duration|date("d/m/Y H:m:s") }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row ">
+                <div class="col-md-4 text-right">
                     <h4>Description et infos :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.description }}</h4>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row ">
+                <div class="col-md-4 text-right">
                     <h4>Ville organisatrice :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.site }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row ">
+                <div class="col-md-4 text-right">
                     <h4>Lieu :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.location }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row ">
+                <div class="col-md-4 text-right">
                     <h4>Rue :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.location.address }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4 text-right">
                     <h4>Code postal :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.location.city.postalCode }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4 text-right">
                     <h4>Latitude :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.location.latitude }}</h4>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-4 text-right">
                     <h4>Longitude :</h4>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4>{{ event.location.longitude }}</h4>
                 </div>
             </div>
         </div>
     </div>
+
+    {% if event.state == "Annulée" %}
+        <div class="col-md-6 offset-md-4">
+            <div class="row justify-content-center">
+                <div class="col-md-4 text-right ">
+                    <h4>Motif d'annulation :</h4>
+                </div>
+                <div class="col-md-8">
+                    <h4>{{ event.comment }}</h4>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
 
     <div class="row justify-content-center">
         <div class="col-md-6">

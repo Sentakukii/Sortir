@@ -10,6 +10,7 @@ use App\Form\CancelEventType;
 use App\Form\EventFormType;
 use App\Form\RegistrationFormType;
 use App\Repository\EventRepository;
+use App\Services\ToolBoxService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class EventController extends AbstractController
 {
@@ -50,13 +52,15 @@ class EventController extends AbstractController
 
     /**
      * @Route("/event/create", name="eventCreate")
+     * @IsGranted("ROLE_USER_ACTIVE")
      */
     public function create(Request $request, EntityManagerInterface $em) {
-        return $this->createOrEdit($request, new Event() ,  $em);
+            return $this->createOrEdit($request, new Event(), $em);
     }
 
     /**
      * @Route("/event/edit", name="eventEdit")
+     * @IsGranted("ROLE_USER_ACTIVE")
      */
     public function edit(Request $request, EntityManagerInterface $em) {
         if ($request->query->get('eventId') != null) {
@@ -148,6 +152,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/event/register", name="register")
+     * @IsGranted("ROLE_USER_ACTIVE")
      */
     public function registerToEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
     {
@@ -175,6 +180,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/event/deregister", name="deregister")
+     * @IsGranted("ROLE_USER_ACTIVE")
      */
     public function deregisterToEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
     {
@@ -195,6 +201,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/cancelEvent", name="cancelEvent")
+     * @IsGranted("ROLE_USER_ACTIVE")
      */
     public function cancelEvent(EntityManagerInterface $em, EventRepository $eventRepository, Request $request)
     {

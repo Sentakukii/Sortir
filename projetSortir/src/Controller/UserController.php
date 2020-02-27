@@ -33,15 +33,54 @@ class UserController extends AbstractController
     public function removeUser(Request $request , EntityManagerInterface $em , UserRepository $userRepository)
     {
         $response = new JsonResponse();
-        $user = $userRepository->find($request->request->get('userId'));
+        $user = $userRepository->find($request->request->get('id'));
 
         if (!$user) {
-            $response->setContent(json_encode(['msg' => 'utilisteur introuvable']));
+            $response->setContent(json_encode(['msg' => 'Utilisteur introuvable']));
             $response->setStatusCode(Response::HTTP_BAD_REQUEST);
         } else {
             $em->remove($user);
             $em->flush();
-            $response->setContent(json_encode(['msg' => "supression de l'utilisateur réussit" ]));
+            $response->setContent(json_encode(['msg' => "Suppression de l'utilisateur réussit" ]));
+        }
+        return $response;
+    }
+
+    /**
+     * @Route("/desactivateUser", name="desactivateUser")
+     */
+    public function desactivateUser(Request $request , EntityManagerInterface $em , UserRepository $userRepository)
+    {
+        $response = new JsonResponse();
+        $user = $userRepository->find($request->request->get('userId'));
+
+        if (!$user) {
+            $response->setContent(json_encode(['msg' => 'Utilisteur introuvable']));
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        } else {
+            $user->setActive(false);
+            $em->persist($user);
+            $em->flush();
+            $response->setContent(json_encode(['msg' => "Désactivation de l'utilisateur réussit" ]));
+        }
+        return $response;
+    }
+    /**
+     * @Route("/activateUser", name="activateUser")
+     */
+    public function activateUser(Request $request , EntityManagerInterface $em , UserRepository $userRepository)
+    {
+        $response = new JsonResponse();
+        $user = $userRepository->find($request->request->get('userId'));
+
+        if (!$user) {
+            $response->setContent(json_encode(['msg' => 'Utilisteur introuvable']));
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        } else {
+            $user->setActive(true);
+            $em->persist($user);
+            $em->flush();
+            $response->setContent(json_encode(['msg' => "Activation de l'utilisateur réussit" ]));
         }
         return $response;
     }

@@ -14,34 +14,47 @@
         <input type="text">
         <button type="button" class="btn btn-primary">Rechercher</button>
     </div>
-    <div class="row">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Ville</th>
-                <th scope="col">Code Postal</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for city in cities %}
-                <tr id="row_event_{{ city.id }}">
-                    <td>{{ city.getName() }}</td>
-                    <td>{{ city.getPostalCode() }}</td>
-                    <td>
-                        <a href="{{ path('editCity', { 'cityId': city.id }) }}">Modifier</a> -
-                        <a href="{{ path('deleteCity', { 'cityId': city.id }) }}">Supprimer</a>
-                    </td>
+    <div class="container">
+        <div class="row justify-content-center">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col" class="col-md-4">Ville</th>
+                    <th scope="col" class="col-md-4">Code Postal</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                     <th scope="col" class="col-md-4">Actions</th>
+                    {% endif %}
                 </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td></td>
-                <td>
-                    <a href="{{ path('newCity') }}">ajouter</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for city in cities %}
+                    <tr id="row_event_{{ city.id }}">
+                        <td>{{ city.getName() }}</td>
+                        <td>{{ city.getPostalCode() }}</td>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('editCity', { 'cityId': city.id }) }}">Modifier</a> -
+                           {# <a href="{{ path('deleteCity', { 'cityId': city.id }) }}">Supprimer</a>#}
+                          {#  <a href="javascript:void(0)" onclick="removeEntity({{ city.id }} ,'row_event_' )">Supprimer</a>#}
+
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+    {% if app.user.active %}
+        <div class="row justify-content-center">
+            <button onclick="window.location='{{ path('newCity') }}'" class="btn btn-primary" >Ajouter</button>
+        </div>
+    {% endif %}
+
 {% endblock %}
+        {% block javascripts %}
+            <script>
+                var urlRemove = {{ url("removeCity") }}
+            </script>
+
+        {% endblock %}

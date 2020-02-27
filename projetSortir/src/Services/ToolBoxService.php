@@ -4,6 +4,8 @@
 namespace App\Services;
 
 
+use App\Entity\User;
+
 class ToolBoxService
 {
 
@@ -16,5 +18,7 @@ class ToolBoxService
         }
         return $string;
     }
+
+
 
 }

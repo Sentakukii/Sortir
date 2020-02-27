@@ -8,6 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 class CityController extends AbstractController
 {
@@ -25,6 +27,7 @@ class CityController extends AbstractController
 
     /**
      * @Route("/newCity", name="newCity")
+     * @IsGranted("ROLE_USER_ACTIVE")
      */
     public function newCity(Request $request, EntityManagerInterface $em)
     {
@@ -50,6 +53,7 @@ class CityController extends AbstractController
 
     /**
      * @Route("/editCity", name="editCity")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function editCity(Request $request, EntityManagerInterface $em)
     {
@@ -76,6 +80,7 @@ class CityController extends AbstractController
 
     /**
      * @Route("/deleteCity", name="deleteCity")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function deleteCity(Request $request, EntityManagerInterface $em)
     {

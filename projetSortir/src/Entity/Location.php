@@ -39,7 +39,7 @@ class Location
     private $longitude;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="location")
+     * @ORM\OneToMany(targetEntity="App\Entity\Event", mappedBy="location",  cascade={"remove"})
      */
     private $events;
 
