@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use MongoDB\Driver\Exception\Exception;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LocationRepository")
@@ -65,7 +66,11 @@ class Location
 
     public function setName(string $name): self
     {
-        $this->name = $name;
+        try{
+            $this->name = $name;
+        }catch (\Exception $e){
+            throw $e;
+        }
 
         return $this;
     }

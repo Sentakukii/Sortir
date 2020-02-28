@@ -72,49 +72,79 @@ class EventController extends AbstractController
         }
     }
 
+    /**
+     *
+     * type_city : 1 = create city 0 = select city
+     * type_location : 1 = create location 0 = select location
+     * @param Request $request
+     * @param Event $event
+     * @param EntityManagerInterface $em
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
     private function createOrEdit( Request $request, Event $event, EntityManagerInterface $em)
     {
-        $form = $this->createForm(EventFormType::class, $event);
-        $form->handleRequest($request);
         $cities = $em->getRepository(City::class)->findAll();
+        $form = $this->createForm(EventFormType::class, $event);
+        try {
+                $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            try {
+
+                if ($form->isSubmitted() && $form->isValid()) {
+
                 $type_location = $form->get('type_location')->getData();
                 $type_city = $form->get('type_city')->getData();
                 $state = $form->get('state')->getData();
                 if ($event->getDate() > new \DateTime()) {
 
                     if (($type_city == "1" || $type_city == "0") && ($type_location == "1" || $type_location == "0") && ($state->getId() == 1 || $state->getId() == 2)) {
-                        if($type_city == "1"){
-                            $city = new City();
-                            $city->setName((string)$form->get('city_label')->getData());
-                            $city->setPostalCode((string)$form->get('postalCode')->getData());
-                            $cityBDD = $em->getRepository(City::class)->findBy(['name' => $city->getName()]);
-                            if ($cityBDD != null){
-                               $city = $cityBDD;
-                            }else {
-                                $em->persist($city);
-                                $em->flush();
+                        if ($type_city == "1") {
+                            if ($form->get('city_label')->getData() && $form->get('postalCode')->getData()) {
+                                $city = new City();
+                                $city->setName((string)$form->get('city_label')->getData());
+                                $city->setPostalCode((string)$form->get('postalCode')->getData());
+                                $cityBDD = $em->getRepository(City::class)->findBy(['name' => $city->getName()]);
+                                if ($cityBDD != null) {
+                                    $city = $cityBDD;
+                                } else {
+                                    $em->persist($city);
+                                    $em->flush();
+                                }
+                            } else {
+                                $this->addFlash("error", "Erreur veuillez vérifier les champs");
+                                return $this->render('event/edit.html.twig', [
+                                    'form' => $form->createView(),
+                                    'cities' => $cities,
+                                    'event' => $event,
+                                ]);
                             }
-                        }else{
+                        } else {
                             $city = $form->get('city')->getData();
                         }
-                        if ($type_location == "1" || $type_city =="1") {
+
+                        if ($type_location == "1" || $type_city == "1") {
                             $location = new Location();
-                            $location->setName($form->get('location_label')->getData());
-                            $location->setCity($city);
-                            $location->setAddress($form->get('address')->getData());
-                            $location->setLatitude((float)$form->get('latitude')->getData());
-                            $location->setLongitude(((float)$form->get('longitude')->getData()));
-                            $locationBDD = $em->getRepository(Location::class)->findBy(['name' => $location->getName(), 'latitude' => $location->getLatitude(), 'longitude' => $location->getLongitude()]);
-                            if ($locationBDD != null){
-                                $location = $locationBDD;
-                            }else {
-                                $em->persist($location);
-                                $em->flush();
+                            if ($form->get('location_label')->getData() && $city && $form->get('address')->getData() && $form->get('latitude')->getData() && $form->get('longitude')->getData()) {
+                                $location->setName($form->get('location_label')->getData());
+                                $location->setCity($city);
+                                $location->setAddress($form->get('address')->getData());
+                                $location->setLatitude((float)$form->get('latitude')->getData());
+                                $location->setLongitude(((float)$form->get('longitude')->getData()));
+                                $locationBDD = $em->getRepository(Location::class)->findBy(['name' => $location->getName(), 'latitude' => $location->getLatitude(), 'longitude' => $location->getLongitude()]);
+                                if ($locationBDD != null) {
+                                    $location = $locationBDD;
+                                } else {
+                                    $em->persist($location);
+                                    $em->flush();
+                                }
+                                $event->setLocation($location);
+                            } else {
+                                $this->addFlash("error", "Erreur veuillez vérifier les champs");
+                                return $this->render('event/edit.html.twig', [
+                                    'form' => $form->createView(),
+                                    'cities' => $cities,
+                                    'event' => $event,
+                                ]);
                             }
-                            $event->setLocation($location);
                         }
                         $event->setOrganizer($this->security->getUser());
                         $event->setState($state);
@@ -138,10 +168,11 @@ class EventController extends AbstractController
                 } else {
                     $this->addFlash("error", "la date est inférieur a la date du jour");
                 }
-            }catch(\Exception $e){
-                $this->addFlash("error", "Erreur veuillez vérifier les champs");
-                $this->addFlash("error", $e->getMessage());
+                /*
+                  }*/
             }
+        }catch(\Exception $e ){
+            $this->addFlash("error", "Erreur veuillez vérifier les champs");
         }
 
         return $this->render('event/edit.html.twig', [

@@ -29,28 +29,35 @@ class EventFormType extends AbstractType
         $builder
             ->add('name',null, [
                 'label' => 'Nom de la Sortie : ',
+                'required' => true,
             ])
             ->add('date',null, [
                 'widget' => 'single_text',
                 'html5' => false,
                 'label' => 'Date et heure de la Sortie : ',
+                'required' => true,
             ])
             ->add('limitInscription',null, [
                'widget' => 'single_text',
                 'html5' => false,
                 'label' => 'Date limite d\'inscription : ',
+                'required' => true,
             ])
             ->add('maxInscriptions',null, [
                 'label' => 'Nombre de places : ',
+                'required' => true,
             ])
             ->add('duration',null, [
                 'label' => 'Durée : ',
+                'required' => true,
             ])
             ->add('description',null, [
                 'label' => 'Description et infos : ',
+                'required' => true,
             ])
             ->add('site',null, [
                 'label' => 'Ville organisatrice  : ',
+                'required' => true,
             ])
             ->add('city',  EntityType::class, [
                 'mapped' => false ,
