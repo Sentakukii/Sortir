@@ -35,7 +35,6 @@ class CityRepository extends ServiceEntityRepository
         ;
     }
     */
-
     /*
     public function findOneBySomeField($value): ?City
     {
