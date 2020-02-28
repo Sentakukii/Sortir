@@ -17,7 +17,7 @@ class ImportCsvType extends AbstractType
             ->add('csvPath', FileType::class, [
                 'label' => 'Fichier csv : ',
                 'mapped' => false,
-                'required' => false,
+                'required' => true,
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',

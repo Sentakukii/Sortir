@@ -60,7 +60,8 @@ class ProfilController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-
+                    $this->addFlash("error", "Echec de l'upload de l'image");
+                    $this->addFlash("error", $e->getMessage());
                 }
 
                 /** @var User $user */
